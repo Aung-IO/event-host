@@ -41,7 +41,7 @@ export default function LandingPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Navbar */}
-           <Header/>
+            <Header />
 
             {/* Hero Section */}
             <section className="mx-auto max-w-4xl px-8 py-24 text-center">

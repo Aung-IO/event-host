@@ -1,9 +1,9 @@
 import { Form } from '@inertiajs/react';
-import { store } from '@/routes/register'; // adjust to your route
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { store } from '@/routes/register'; // adjust to your route
 
 export default function Register() {
     return (

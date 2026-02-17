@@ -1,8 +1,8 @@
 import { Form } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { store } from '@/routes/login';
 
 export default function Login() {
@@ -18,7 +18,6 @@ export default function Login() {
                     <Form {...store.form()} resetOnSuccess={['password']}>
                         {({ processing, errors }) => (
                             <div className="space-y-5">
-                                
                                 {/* Email */}
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
