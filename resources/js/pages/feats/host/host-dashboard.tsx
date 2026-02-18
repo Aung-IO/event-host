@@ -1,13 +1,13 @@
+import { usePage } from '@inertiajs/react';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { usePage } from '@inertiajs/react';
 
 type PageProps = {
+    id: number;
     auth: {
         user: {
-            id: number;
             name: string;
             email: string;
             role: string;
@@ -19,14 +19,14 @@ export default function HostDashboard() {
     const { auth } = usePage<PageProps>().props;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+        <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50">
             <Header />
 
             <div className="container mx-auto px-4 py-8">
                 {/* Welcome Section */}
                 <div className="mb-8">
                     <div className="mb-2 flex items-center gap-3">
-                        <h1 className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
+                        <h1 className="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
                             Host Dashboard
                         </h1>
                         <Badge className="bg-purple-500">Host</Badge>

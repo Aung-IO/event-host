@@ -1,8 +1,10 @@
+import { logout, welcome } from '@/routes';
+import admin from '@/routes/admin';
+import host from '@/routes/host';
+import login from '@/routes/login';
+import register from '@/routes/register';
 import { Link, usePage } from '@inertiajs/react';
 import { Button } from './ui/button';
-import register from '@/routes/register';
-import { logout } from '@/routes';
-import login from '@/routes/login';
 
 type PageProps = {
     auth: {
@@ -10,17 +12,33 @@ type PageProps = {
             id: number;
             name: string;
             email: string;
+            role: string;
         } | null;
     };
 };
 export default function Header() {
     const { auth } = usePage<PageProps>().props;
+    
+    
 
     return (
         <nav className="flex items-center justify-between border-b px-4 py-3">
-            <h1 className="text-2xl font-bold tracking-tight">EventHost</h1>
+            <Link href={welcome()}>
+                <h1 className="text-2xl font-bold tracking-tight">EventHost</h1>
+            </Link>
 
             <div className="flex items-center gap-4">
+                {auth.user && auth.user.role === 'host' && (
+                    <Button variant="ghost" asChild>
+                        <Link href={host.dashboard.url()}>My Dashboard</Link>
+                    </Button>
+                )}
+                {auth.user && auth.user.role === 'admin' && (
+                    <Button variant="ghost" asChild>
+                        <Link href={admin.dashboard.url()}>Admin Dashboard</Link>
+                    </Button>
+                )}
+
                 {auth.user ? (
                     <>
                         <span className="text-sm text-muted-foreground">{auth.user.name}</span>

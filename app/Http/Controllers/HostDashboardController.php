@@ -12,6 +12,6 @@ class HostDashboardController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('host-dashboard');
+        return Inertia::render('feats/host/host-dashboard');
     }
 }

@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
 
     // User Dashboard - Accessible by all authenticated users
     Route::get('/dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('feats/user/dashboard');
     })->name('dashboard');
     
     // Protected routes for authenticated users can be defined here

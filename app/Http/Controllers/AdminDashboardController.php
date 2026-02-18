@@ -12,6 +12,6 @@ class AdminDashboardController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('admin-dashboard');
+        return Inertia::render('feats/admin/admin-dashboard');
     }
 }
