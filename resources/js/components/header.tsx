@@ -5,6 +5,7 @@ import login from '@/routes/login';
 import register from '@/routes/register';
 import { Link, usePage } from '@inertiajs/react';
 import { Button } from './ui/button';
+import events from '@/routes/events';
 
 type PageProps = {
     auth: {
@@ -18,8 +19,6 @@ type PageProps = {
 };
 export default function Header() {
     const { auth } = usePage<PageProps>().props;
-    
-    
 
     return (
         <nav className="flex items-center justify-between border-b px-4 py-3">
@@ -38,6 +37,9 @@ export default function Header() {
                         <Link href={admin.dashboard.url()}>Admin Dashboard</Link>
                     </Button>
                 )}
+                <Button variant="ghost" asChild>
+                    <Link href={events.index()}>Explore Events</Link>
+                </Button>
 
                 {auth.user ? (
                     <>

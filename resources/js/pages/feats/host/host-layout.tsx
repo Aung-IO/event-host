@@ -18,11 +18,15 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { label: 'Dashboard', href: host.dashboard.url(), icon: '🏠' },
-    { label: 'Create New Event', href: '#', icon: '✨' },
+    { label: 'Overview', href: host.dashboard.url(), icon: '📊' },
+    { label: 'Create Event', href: '#', icon: '➕' },
+    { label: 'All Events', href: '#', icon: '📅' },
+    { label: 'Attendees', href: '#', icon: '👥' },
+    { label: 'Analytics', href: '#', icon: '📈' },
     { label: 'Notifications', href: '#', icon: '🔔' },
     { label: 'Settings', href: '#', icon: '⚙️' },
 ];
+
 
 export default function HostLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<PageProps>().props;

@@ -1,5 +1,5 @@
-import host from '@/routes/host';
 import { Link, usePage } from '@inertiajs/react';
+import admin from '@/routes/admin';
 
 type PageProps = {
     auth: {
@@ -17,12 +17,16 @@ type NavItem = {
     icon: string;
 };
 
-const navItems: NavItem[] = [
-    { label: 'Dashboard', href: host.dashboard.url(), icon: '🏠' },
-    { label: 'Create New Event', href: '#', icon: '✨' },
-    { label: 'Notifications', href: '#', icon: '🔔' },
+const adminNavItems: NavItem[] = [
+    { label: 'Overview', href: admin.dashboard.url(), icon: '📊' },
+    { label: 'Event Approvals', href: '#', icon: '🕒' },
+    { label: 'All Events', href: '#', icon: '📅' },
+    { label: 'Users', href: '#', icon: '👥' },
+    { label: 'Reports', href: '#', icon: '🚩' },
+    { label: 'Payments', href: '#', icon: '💳' },
     { label: 'Settings', href: '#', icon: '⚙️' },
 ];
+
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<PageProps>().props;
@@ -34,7 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <aside className="sticky top-0 flex h-full w-64 shrink-0 flex-col overflow-y-auto border-r bg-white/70 backdrop-blur">
                 {/* Nav */}
                 <nav className="flex-1 space-y-1 px-3 py-4">
-                    {navItems.map((item) => {
+                    {adminNavItems.map((item) => {
                         const isActive = item.href !== '#' && currentPath === item.href;
                         return (
                             <Link

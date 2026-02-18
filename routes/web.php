@@ -11,6 +11,11 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('welcome');
 
+Route::get('/events', function(){
+    return Inertia::render('feats/events/index');
+})->name('events.index');
+
+
 Route::middleware('guest')->group(function () {
 
     Route::get('login', [SessionsController::class, 'create'])
