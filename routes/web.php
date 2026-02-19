@@ -15,6 +15,10 @@ Route::get('/events', function(){
     return Inertia::render('feats/events/index');
 })->name('events.index');
 
+Route::get('/events/1', function(){
+    return Inertia::render('feats/events/show');
+})->name('events.show');
+
 
 Route::middleware('guest')->group(function () {
 
