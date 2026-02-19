@@ -3,22 +3,22 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\SessionsController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HostDashboardController;
 use Illuminate\Support\Facades\Route;
+
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('welcome');
 
-Route::get('/events', function(){
-    return Inertia::render('feats/events/index');
-})->name('events.index');
+// Public event routes — viewable by everyone
+Route::get('events', [EventController::class, 'index'])
+    ->name('events.index');
 
-Route::get('/events/1', function(){
-    return Inertia::render('feats/events/show');
-})->name('events.show');
-
+Route::get('events/{event}', [EventController::class, 'show'])
+    ->name('events.show');
 
 Route::middleware('guest')->group(function () {
 
@@ -48,9 +48,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Host Dashboard - Only accessible by host role
-    Route::middleware('host')->group(function () {
-        Route::get('/host/dashboard', [HostDashboardController::class, 'index'])
-            ->name('host.dashboard');
+    Route::middleware('host')->prefix('host')->name('host.')->group(function () {
+        Route::get('/dashboard', [HostDashboardController::class, 'index'])
+            ->name('dashboard');                          // → host.dashboard
+        Route::resource('events', EventController::class); // → host.events.*
     });
 
     // User Dashboard - Accessible by all authenticated users

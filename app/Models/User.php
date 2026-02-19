@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->role === 'user';
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

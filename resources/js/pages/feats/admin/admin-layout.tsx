@@ -51,7 +51,7 @@ const adminNavItems: NavItem[] = [
 
 
 
-export default function HostLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<PageProps>().props;
     const currentPath = window.location.pathname;
 

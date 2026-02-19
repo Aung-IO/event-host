@@ -1,5 +1,3 @@
-import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
 import {
     Sidebar,
     SidebarContent,
@@ -17,7 +15,10 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
+import events from '@/routes/events';
 import host from '@/routes/host';
+import { Link, usePage } from '@inertiajs/react';
+import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
 
 type PageProps = {
     auth: {
@@ -38,8 +39,8 @@ type NavItem = {
 
 const navItems: NavItem[] = [
     { label: 'Overview', href: host.dashboard.url(), icon: LayoutDashboard },
-    { label: 'Create Event', href: '#', icon: PlusCircle },
-    { label: 'All Events', href: '#', icon: CalendarDays },
+    { label: 'Create Event', href: host.events.create.url(), icon: PlusCircle },
+    { label: 'All Events', href: host.events.index.url(), icon: CalendarDays },
     { label: 'Attendees', href: '#', icon: Users },
     { label: 'Analytics', href: '#', icon: BarChart3 },
     { label: 'Notifications', href: '#', icon: Bell, badge: 3 },
