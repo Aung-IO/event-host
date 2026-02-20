@@ -13,7 +13,10 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Inertia::render('feats/events/index');
+        $allEvents = Event::all();
+        return Inertia::render('feats/events/index', [
+            'allEvents' => $allEvents,
+        ]);
     }
 
 

@@ -4,9 +4,9 @@ import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import HostLayout from '../host/host-layout';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import HostLayout from '../host/host-layout';
 
 export default function CreateEvent() {
     const { data, setData, processing, errors, submit } = useForm({

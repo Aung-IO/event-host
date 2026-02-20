@@ -1,10 +1,10 @@
-import CardImage from '../../../../../public/game.jpeg';
+import EventCard from '@/components/eventCard';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function EventList() {
+export default function EventList({ allEvents }: { allEvents: any }) {
     return (
         <div>
             <Header />
@@ -24,29 +24,10 @@ export default function EventList() {
                     </div>
                 </div>
                 {/* event card */}
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 mt-2">
-                    <div className="group cursor-pointer">
-                        {/* Image */}
-                        <div className="relative aspect-3/2 overflow-hidden rounded-lg">
-                            <img
-                                src={CardImage}
-                                alt="Hero mindset"
-                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                            />
-
-                            <Badge className="absolute top-3 right-3 bg-gray-600">Conference</Badge>
-
-                            
-                        </div>
-
-                        {/* Content */}
-                        <div >
-                            <span className="line-clamp-1 text-base font-semibold">Learning Rust with Doc</span>
-                            <span className="text-xs text-muted-foreground">
-                                From 10,000 MMK / guest
-                            </span>
-                        </div>
-                    </div>
+                <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+                    {allEvents.map((event: any) => (
+                        <EventCard key={event.id} event={event} />
+                    ))}
                 </div>
             </div>
         </div>

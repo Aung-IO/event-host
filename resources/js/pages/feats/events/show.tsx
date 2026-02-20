@@ -9,24 +9,24 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
-export default function EventDetailPage() {
+export default function EventDetailPage({event}: {event : any}) {
     return (
         <div>
             <Header />
             <div className="px-10 py-10">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <div className="col-span-2 grid grid-cols-2 gap-1.5">
-                        <img src={Image1} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={Image2} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={Image3} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={Image4} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
+                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
+                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
+                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
+                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
                     </div>
 
                     <div className="flex justify-center">
                         <div className="text-cente space-y-6">
                             <div>
                                 <h1 className="text-3xl font-bold">Must-Try: Hidden Yangon Bike and Food Tour</h1>
-                                <p className="text-muted-foreground mt-8">
+                                <p className="mt-8 text-muted-foreground">
                                     Discover local culture by bike - hidden gems, street food, lunch or dinner, and real neighborhood charm.
                                 </p>
                             </div>
@@ -60,13 +60,14 @@ export default function EventDetailPage() {
                                     <span className="text-base font-light text-gray-500">San Chung, Yangon</span>
                                 </div>
                             </div>
-                            
 
                             <Card className="mt-6 text-left">
                                 <CardHeader>
                                     <div className="flex items-center justify-between">
                                         <CardTitle className="text-xl">Event Details</CardTitle>
-                                        <span className="font-semibold">20,000 MMK / <span className="text-base font-light text-gray-500">guest</span></span>
+                                        <span className="font-semibold">
+                                            20,000 MMK / <span className="text-base font-light text-gray-500">guest</span>
+                                        </span>
                                     </div>
                                 </CardHeader>
 

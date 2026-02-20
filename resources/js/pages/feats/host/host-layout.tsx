@@ -40,7 +40,7 @@ type NavItem = {
 const navItems: NavItem[] = [
     { label: 'Overview', href: host.dashboard.url(), icon: LayoutDashboard },
     { label: 'Create Event', href: host.events.create.url(), icon: PlusCircle },
-    { label: 'All Events', href: host.events.index.url(), icon: CalendarDays },
+    { label: 'My Events', href: host.events.index.url(), icon: CalendarDays },
     { label: 'Attendees', href: '#', icon: Users },
     { label: 'Analytics', href: '#', icon: BarChart3 },
     { label: 'Notifications', href: '#', icon: Bell, badge: 3 },
