@@ -14,7 +14,8 @@ class Event extends Model
     'location',
     'capacity',
     'image',
-    'reject_reason'
+    'reject_reason',
+    'host_id',
 ];
 
 public function user()

@@ -1,9 +1,9 @@
 import { usePage } from '@inertiajs/react';
-import HostLayout from './host-layout';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import HostLayout from './host-layout';
 
 type PageProps = {
     id: number;
@@ -20,7 +20,7 @@ export default function HostDashboard() {
     const { auth } = usePage<PageProps>().props;
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             <Header />
 
             <HostLayout>
