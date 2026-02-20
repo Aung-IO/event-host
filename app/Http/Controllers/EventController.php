@@ -82,16 +82,22 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date'],
-            'location' => ['required', 'string', 'max:255'],
-            'capacity' => ['required', 'integer', 'min:1'],
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'start_date'  => ['required', 'date'],
+            'end_date'    => ['required', 'date'],
+            'location'    => ['required', 'string', 'max:255'],
+            'capacity'    => ['required', 'integer', 'min:1'],
+            'image'       => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
-        $event->update($request->all());
+        $data = $request->except('image');
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('events', 'public');
+        }
+
+        $event->update($data);
 
         return redirect()->route('events.index');
     }
