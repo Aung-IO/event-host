@@ -42,7 +42,7 @@ const adminNavItems: NavItem[] = [
     { label: 'Overview', href: admin.dashboard.url(), icon: LayoutDashboard },
     { label: 'Event Approvals', href: '#', icon: CalendarCheck },
     { label: 'All Events', href: '#', icon: Calendar },
-    { label: 'Users', href: '#', icon: Users },
+    { label: 'Users', href: admin.users.url(), icon: Users },
     { label: 'Reports', href: '#', icon: FileText },
     { label: 'Payments', href: '#', icon: CreditCard },
     { label: 'Settings', href: '#', icon: Settings },

@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
             ->name('admin.dashboard');
+        Route::get('/admin/users', [AdminDashboardController::class, 'users'])
+            ->name('admin.users');
+        Route::post('/admin/users/{user}/reset-password', [AdminDashboardController::class, 'resetPassword'])
+            ->name('admin.users.reset-password');
     });
 
     // Host Dashboard - Only accessible by host role
