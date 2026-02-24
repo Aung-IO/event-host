@@ -15,7 +15,6 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
-import events from '@/routes/events';
 import host from '@/routes/host';
 import { Link, usePage } from '@inertiajs/react';
 import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
@@ -44,7 +43,7 @@ const navItems: NavItem[] = [
     { label: 'Attendees', href: '#', icon: Users },
     { label: 'Analytics', href: '#', icon: BarChart3 },
     { label: 'Notifications', href: '#', icon: Bell, badge: 3 },
-    { label: 'Settings', href: '#', icon: Settings },
+    { label: 'Settings', href: '/profile', icon: Settings },
 ];
 
 export default function HostLayout({ children }: { children: React.ReactNode }) {

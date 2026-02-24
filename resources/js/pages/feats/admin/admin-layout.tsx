@@ -1,6 +1,3 @@
-import { Link, usePage } from '@inertiajs/react';
-import { Calendar, CalendarCheck, CreditCard, FileText, Settings, Users } from 'lucide-react';
-import { LayoutDashboard } from 'lucide-react';
 import {
     Sidebar,
     SidebarContent,
@@ -19,6 +16,9 @@ import {
     SidebarTrigger,
 } from '@/components/ui/sidebar';
 import admin from '@/routes/admin';
+import profile from '@/routes/profile';
+import { Link, usePage } from '@inertiajs/react';
+import { Calendar, CalendarCheck, CreditCard, FileText, LayoutDashboard, Settings, Users } from 'lucide-react';
 
 type PageProps = {
     auth: {
@@ -26,6 +26,7 @@ type PageProps = {
             name: string;
             email: string;
             role: string;
+            avatar: string | null;
         };
     };
 };
@@ -37,8 +38,6 @@ type NavItem = {
     badge?: number;
 };
 
-
-
 const adminNavItems: NavItem[] = [
     { label: 'Overview', href: admin.dashboard.url(), icon: LayoutDashboard },
     { label: 'Event Approvals', href: '#', icon: CalendarCheck },
@@ -48,8 +47,6 @@ const adminNavItems: NavItem[] = [
     { label: 'Payments', href: '#', icon: CreditCard },
     { label: 'Settings', href: '#', icon: Settings },
 ];
-
-
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<PageProps>().props;
@@ -108,13 +105,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" className="cursor-default select-none">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white">
-                                    {auth.user.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div className="flex min-w-0 flex-col leading-none">
-                                    <span className="truncate text-sm font-semibold">{auth.user.name}</span>
-                                    <span className="truncate text-xs text-muted-foreground">{auth.user.email}</span>
-                                </div>
+                                <Link href={profile.show.url()} className="flex items-center justify-center gap-2">
+                                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
+                                        {auth.user.avatar ? (
+                                            <img
+                                                src={`/storage/${auth.user.avatar}`}
+                                                alt="Avatar"
+                                                className="h-full w-full rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            auth.user.name.charAt(0).toUpperCase()
+                                        )}
+                                    </span>
+                                    <div className="flex min-w-0 flex-col leading-none">
+                                        <span className="truncate text-sm font-semibold">{auth.user.name}</span>
+                                        <span className="truncate text-xs text-muted-foreground">{auth.user.email}</span>
+                                    </div>
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
@@ -132,7 +139,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <span className="text-sm font-medium text-muted-foreground">Admin Dashboard</span>
                 </header>
 
-                <main className="flex-1 overflow-y-auto">{children}</main>
+                <main className="flex-1 overflow-y-auto">
+                    <div className="container mx-auto px-4 py-8">{children}</div>
+                </main>
             </SidebarInset>
         </SidebarProvider>
     );

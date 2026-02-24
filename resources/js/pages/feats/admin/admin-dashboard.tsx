@@ -1,9 +1,9 @@
 import { usePage } from '@inertiajs/react';
-import AdminLayout from './admin-layout';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import AdminLayout from './admin-layout';
 
 type PageProps = {
     id: number;

@@ -5,8 +5,8 @@ use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\SessionsController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HostDashboardController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -35,8 +35,6 @@ Route::middleware('guest')->group(function () {
         ->name('register.store');
 });
 
-
-
 Route::middleware('auth')->group(function () {
     Route::delete('logout', [SessionsController::class, 'destroy'])
         ->name('logout');
@@ -60,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('feats/user/dashboard');
     })->name('dashboard');
-    
-    // Protected routes for authenticated users can be defined here
+
+    // Profile routes - accessible by all authenticated users
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 });
