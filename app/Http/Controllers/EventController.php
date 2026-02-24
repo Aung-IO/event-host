@@ -19,6 +19,14 @@ class EventController extends Controller
         ]);
     }
 
+    public function myEvents()
+    {
+        $myEvents = Event::where('host_id', auth()->id())->get();
+        return Inertia::render('feats/events/my-events', [
+            'myEvents' => $myEvents,
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +61,7 @@ class EventController extends Controller
         ]);
 
 
-        return redirect()->route('events.index');
+        return redirect()->route('host.my-events');
     }
 
     /**
@@ -99,7 +107,7 @@ class EventController extends Controller
 
         $event->update($data);
 
-        return redirect()->route('events.index');
+        return redirect()->route('host.my-events');
     }
 
     /**

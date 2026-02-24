@@ -24,7 +24,7 @@ export default function HostDashboard() {
             <Header />
 
             <HostLayout>
-                <div className="container mx-auto px-4 py-8">
+                <div>
                     {/* Welcome Section */}
                     <div className="mb-8">
                         <div className="mb-2 flex items-center gap-3">

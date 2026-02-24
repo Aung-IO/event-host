@@ -40,7 +40,7 @@ type NavItem = {
 const navItems: NavItem[] = [
     { label: 'Overview', href: host.dashboard.url(), icon: LayoutDashboard },
     { label: 'Create Event', href: host.events.create.url(), icon: PlusCircle },
-    { label: 'My Events', href: host.events.index.url(), icon: CalendarDays },
+    { label: 'My Events', href: host.myEvents.url(), icon: CalendarDays },
     { label: 'Attendees', href: '#', icon: Users },
     { label: 'Analytics', href: '#', icon: BarChart3 },
     { label: 'Notifications', href: '#', icon: Bell, badge: 3 },
@@ -128,7 +128,9 @@ export default function HostLayout({ children }: { children: React.ReactNode }) 
                     <span className="text-sm font-medium text-muted-foreground">Host Dashboard</span>
                 </header>
 
-                <main className="flex-1 overflow-y-auto">{children}</main>
+                <main className="flex-1 overflow-y-auto">
+                    <div className="container mx-auto px-4 py-8">{children}</div>
+                </main>
             </SidebarInset>
         </SidebarProvider>
     );

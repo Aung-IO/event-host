@@ -28,7 +28,7 @@ export default function CreateEvent() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             <Header />
             <HostLayout>
-                <div className="container mx-auto px-4 py-8">
+                <div>
                     <Card >
                         <CardHeader>
                             <CardTitle>Create Event</CardTitle>
