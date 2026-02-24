@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('events', EventController::class); // → host.events.*
         Route::get('/my-events', [EventController::class, 'myEvents'])
             ->name('my-events');
+        
     });
 
     // User Dashboard - Accessible by all authenticated users

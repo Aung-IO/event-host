@@ -1,4 +1,5 @@
-import events from '@/routes/host/events';
+import { show as showEvent } from '@/routes/events';
+import hostEvents from '@/routes/host/events';
 import { Link, router, usePage } from '@inertiajs/react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Badge } from './ui/badge';
@@ -12,12 +13,12 @@ export default function EventCard({ event }: { event: any }) {
         e.preventDefault();
         e.stopPropagation();
         if (confirm('Are you sure you want to delete this event?')) {
-            router.delete(events.destroy(event.id).url);
+            router.delete(hostEvents.destroy(event.id).url);
         }
     }
 
     return (
-        <Link href={events.show(event.id).url}>
+        <Link href={showEvent(event.id).url}>
             <div className="group cursor-pointer">
                 {/* Image */}
                 <div className="relative aspect-3/2 overflow-hidden rounded-lg">
@@ -32,7 +33,7 @@ export default function EventCard({ event }: { event: any }) {
                     {/* Edit / Delete buttons — visible only to the owner */}
                     {isOwner && (
                         <div className="absolute right-2 bottom-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                            <Link href={events.edit(event.id).url} onClick={(e) => e.stopPropagation()}>
+                            <Link href={hostEvents.edit(event.id).url} onClick={(e) => e.stopPropagation()}>
                                 <Button size="icon" variant="secondary" className="h-7 w-7">
                                     <Pencil className="h-3.5 w-3.5" />
                                 </Button>
