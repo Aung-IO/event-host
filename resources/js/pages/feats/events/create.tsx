@@ -29,7 +29,7 @@ export default function CreateEvent() {
             <Header />
             <HostLayout>
                 <div>
-                    <Card >
+                    <Card>
                         <CardHeader>
                             <CardTitle>Create Event</CardTitle>
                             <CardDescription>Fill in the details below to create a new event.</CardDescription>
@@ -44,7 +44,7 @@ export default function CreateEvent() {
                                         id="title"
                                         value={data.title}
                                         onChange={(e) => setData('title', e.target.value)}
-                                        placeholder='Smoke Weed Everyday'
+                                        placeholder="Smoke Weed Everyday"
                                         className={errors.title ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
@@ -71,7 +71,7 @@ export default function CreateEvent() {
                                         id="location"
                                         value={data.location}
                                         onChange={(e) => setData('location', e.target.value)}
-                                        placeholder='SanChung, Yangon'
+                                        placeholder="SanChung, Yangon"
                                         className={errors.location ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
@@ -112,7 +112,6 @@ export default function CreateEvent() {
                                         type="number"
                                         min={1}
                                         value={data.capacity}
-                                        
                                         onChange={(e) => setData('capacity', e.target.value)}
                                         className={errors.capacity ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />

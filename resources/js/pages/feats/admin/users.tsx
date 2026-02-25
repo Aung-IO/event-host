@@ -33,7 +33,6 @@ type PageProps = {
 const ROLES = ['user', 'host', 'admin'] as const;
 type Role = (typeof ROLES)[number];
 
-
 function RoleSelect({
     user,
     currentUserId,

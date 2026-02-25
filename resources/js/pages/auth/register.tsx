@@ -21,7 +21,7 @@ export default function Register() {
                                 {/* Name */}
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Name</Label>
-                                    <Input id="name" name="name" type="text" placeholder="John Doe" required autoFocus/>
+                                    <Input id="name" name="name" type="text" placeholder="John Doe" required autoFocus />
                                     {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
                                 </div>
 

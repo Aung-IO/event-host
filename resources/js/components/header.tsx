@@ -1,11 +1,10 @@
+import { Link, usePage } from '@inertiajs/react';
 import { logout, welcome } from '@/routes';
 import admin from '@/routes/admin';
 import events from '@/routes/events';
 import host from '@/routes/host';
 import login from '@/routes/login';
-import profile from '@/routes/profile';
 import register from '@/routes/register';
-import { Link, usePage } from '@inertiajs/react';
 import { Button } from './ui/button';
 
 type PageProps = {
@@ -44,8 +43,6 @@ export default function Header() {
 
                 {auth.user ? (
                     <>
-                       
-
                         <Link href={logout()} method="post" as="button">
                             <Button variant="destructive">Logout</Button>
                         </Link>

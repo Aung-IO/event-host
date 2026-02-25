@@ -3,7 +3,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 type Event = {
     id: number;
     title: string;
@@ -40,9 +39,9 @@ export default function LandingPage() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Navbar */}
-            
+
             <Header />
- 
+
             {/* Hero Section */}
             <section className="mx-auto max-w-4xl px-8 py-24 text-center">
                 <h2 className="text-5xl leading-tight font-bold tracking-tight">Discover. Join. Host.</h2>

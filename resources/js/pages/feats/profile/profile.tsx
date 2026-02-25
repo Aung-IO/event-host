@@ -80,7 +80,7 @@ export default function Profile() {
             <Header />
 
             <AdminLayout>
-                <main className=''>
+                <main>
                     {/* Page Title */}
                     <div className="mb-8">
                         <h1 className="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">My Profile</h1>
