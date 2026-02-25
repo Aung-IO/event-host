@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -23,9 +24,8 @@ class AdminDashboardController extends Controller
      */
     public function users(): Response
     {
-        $users = User::where('role', '!=', 'admin')
-            ->select('id', 'name', 'email', 'role', 'avatar', 'created_at')
-            ->latest()
+        $users = User::select('id', 'name', 'email', 'role', 'avatar', 'created_at')
+            ->latest('id')
             ->get();
 
         return Inertia::render('feats/admin/users', ['users' => $users]);
@@ -44,5 +44,24 @@ class AdminDashboardController extends Controller
             'name' => $user->name,
             'password' => $temp,
         ]);
+    }
+
+    /**
+     * Change a user's role.
+     */
+    public function changeRole(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'role' => ['required', 'in:user,host,admin'],
+        ]);
+
+        // Prevent changing one's own role from the UI
+        if ($user->id === auth()->id()) {
+            return back()->withErrors(['role' => 'You cannot change your own role.']);
+        }
+
+        $user->update(['role' => $validated['role']]);
+
+        return back()->with('success', "Role updated to {$validated['role']} for {$user->name}.");
     }
 }

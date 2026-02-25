@@ -15,6 +15,7 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/sonner';
 import admin from '@/routes/admin';
 import profile from '@/routes/profile';
 import { Link, usePage } from '@inertiajs/react';
@@ -54,6 +55,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <SidebarProvider>
+            <Toaster richColors position="top-right" />
             <Sidebar collapsible="icon">
                 {/* Sidebar Header — branding */}
                 <SidebarHeader>

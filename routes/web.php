@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
             ->name('admin.users');
         Route::post('/admin/users/{user}/reset-password', [AdminDashboardController::class, 'resetPassword'])
             ->name('admin.users.reset-password');
+        Route::post('/admin/users/{user}/change-role', [AdminDashboardController::class, 'changeRole'])
+            ->name('admin.users.change-role');
     });
 
     // Host Dashboard - Only accessible by host role
