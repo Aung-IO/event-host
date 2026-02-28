@@ -58,7 +58,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('events', EventController::class); // → host.events.*
         Route::get('/my-events', [EventController::class, 'myEvents'])
             ->name('my-events');
-        
+        // Host profile routes
+        Route::get('/profile', [ProfileController::class, 'showHost'])
+            ->name('profile');                            // → host.profile
     });
 
     // User Dashboard - Accessible by all authenticated users

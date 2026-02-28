@@ -19,7 +19,7 @@ class AdminDashboardController extends Controller
         return Inertia::render('feats/admin/admin-dashboard');
     }
 
-    /**
+    /** 
      * List all non-admin users.
      */
     public function users(): Response

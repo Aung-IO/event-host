@@ -20,6 +20,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Show the host profile page.
+     */
+    public function showHost(Request $request)
+    {
+        return Inertia::render('feats/host/host-profile', [
+            'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
+        ]);
+    }
+
+    /**
      * Update name and email.
      */
     public function update(Request $request)

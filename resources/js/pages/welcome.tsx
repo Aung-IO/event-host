@@ -48,7 +48,7 @@ export default function LandingPage() {
                 <p className="mt-6 text-lg text-muted-foreground">Find amazing events around you or create your own and bring people together.</p>
                 <div className="mt-8 flex justify-center gap-4">
                     <Button size="lg">Explore Events</Button>
-                    <Button size="lg" variant="outline">
+                    <Button size="lg" className="bg-secondary/20 text-secondary-foreground hover:bg-secondary/30">
                         Become a Host
                     </Button>
                 </div>

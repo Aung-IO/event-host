@@ -16,6 +16,7 @@ import {
     SidebarTrigger,
 } from '@/components/ui/sidebar';
 import host from '@/routes/host';
+
 import { Link, usePage } from '@inertiajs/react';
 import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
 
@@ -43,7 +44,7 @@ const navItems: NavItem[] = [
     { label: 'Attendees', href: '#', icon: Users },
     { label: 'Analytics', href: '#', icon: BarChart3 },
     { label: 'Notifications', href: '#', icon: Bell, badge: 3 },
-    { label: 'Settings', href: '/profile', icon: Settings },
+    // { label: 'Settings', href: '/host/profile', icon: Settings },
 ];
 
 export default function HostLayout({ children }: { children: React.ReactNode }) {
@@ -103,13 +104,23 @@ export default function HostLayout({ children }: { children: React.ReactNode }) 
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" className="cursor-default select-none">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white">
-                                    {auth.user.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div className="flex min-w-0 flex-col leading-none">
-                                    <span className="truncate text-sm font-semibold">{auth.user.name}</span>
-                                    <span className="truncate text-xs text-muted-foreground">{auth.user.email}</span>
-                                </div>
+                                <Link href={host.profile.url()} className="flex items-center justify-center gap-2">
+                                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
+                                        {auth.user.avatar ? (
+                                            <img
+                                                src={`/storage/${auth.user.avatar}`}
+                                                alt="Avatar"
+                                                className="h-full w-full rounded-full object-cover"
+                                            />
+                                        ) : (
+                                            auth.user.name.charAt(0).toUpperCase()
+                                        )}
+                                    </span>
+                                    <div className="flex min-w-0 flex-col leading-none">
+                                        <span className="truncate text-sm font-semibold">{auth.user.name}</span>
+                                        <span className="truncate text-xs text-muted-foreground">{auth.user.email}</span>
+                                    </div>
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
