@@ -30,6 +30,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Show the user profile page.
+     */
+    public function showUser(Request $request)
+    {
+        return Inertia::render('feats/user/user-profile', [
+            'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
+        ]);
+    }
+
+    /**
      * Update name and email.
      */
     public function update(Request $request)
@@ -37,8 +47,8 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
         ]);
 
         $user->update($validated);
@@ -59,7 +69,7 @@ class ProfileController extends Controller
 
         // Delete the old avatar if it exists
         if ($user->avatar) {
-            $oldPath = storage_path('app/public/' . $user->avatar);
+            $oldPath = storage_path('app/public/'.$user->avatar);
             if (file_exists($oldPath)) {
                 unlink($oldPath);
             }
@@ -79,7 +89,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password'         => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
         $request->user()->update([

@@ -73,4 +73,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    // User-specific profile view
+    Route::get('/user/profile', [ProfileController::class, 'showUser'])->name('user.profile');
 });

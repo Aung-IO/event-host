@@ -5,6 +5,7 @@ import events from '@/routes/events';
 import host from '@/routes/host';
 import login from '@/routes/login';
 import register from '@/routes/register';
+import userRoutes from '@/routes/user';
 import { Button } from './ui/button';
 
 type PageProps = {
@@ -35,6 +36,11 @@ export default function Header() {
                 {auth.user && auth.user.role === 'admin' && (
                     <Button variant="ghost" asChild>
                         <Link href={admin.dashboard.url()}>Admin Dashboard</Link>
+                    </Button>
+                )}
+                {auth.user && auth.user.role === 'user' && (
+                    <Button variant="ghost" asChild>
+                        <Link href={userRoutes.dashboard.url()}>My Dashboard</Link>
                     </Button>
                 )}
                 <Button variant="ghost" asChild>
