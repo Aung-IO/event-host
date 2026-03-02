@@ -95,7 +95,7 @@ export default function CreateEvent() {
                                         id="location"
                                         value={data.location}
                                         onChange={(e) => setData('location', e.target.value)}
-                                        placeholder="SanChung, Yangon"
+                                        placeholder="add URL"
                                         className={errors.location ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}

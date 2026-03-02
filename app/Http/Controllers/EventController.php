@@ -79,8 +79,13 @@ class EventController extends Controller
     {
         $event->loadCount('registrations');
 
+        $userRegistered = auth()->check()
+            ? $event->registrations()->where('user_id', auth()->id())->exists()
+            : false;
+
         return Inertia::render('feats/events/show', [
-            'event' => $event,
+            'event'          => $event,
+            'userRegistered' => $userRegistered,
         ]);
     }
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\SessionsController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventRegistrationController;
 use App\Http\Controllers\HostDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Event registration — join / leave (any authenticated user)
+    Route::post('/events/{event}/join', [EventRegistrationController::class, 'store'])
+        ->name('events.join');
+    Route::delete('/events/{event}/leave', [EventRegistrationController::class, 'destroy'])
+        ->name('events.leave');
+    Route::get('/my-registrations', [EventRegistrationController::class, 'index'])
+        ->name('events.my-registrations');
 
     // Admin routes — only accessible by admin role
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
