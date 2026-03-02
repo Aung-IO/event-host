@@ -1,15 +1,15 @@
 import { usePage } from '@inertiajs/react';
 import ProfileForm from '@/components/profile-form';
-import UserLayout from './user-layout';
+import AdminLayout from './admin-layout';
 
 type User = { id: number; name: string; email: string; avatar: string | null; role: string };
 type PageProps = { auth: { user: User }; user: User; flash?: { success?: string } };
 
-export default function UserProfile() {
+export default function AdminProfile() {
     const { user, flash } = usePage<PageProps>().props;
     return (
-        <UserLayout>
+        <AdminLayout>
             <ProfileForm user={user} flash={flash} />
-        </UserLayout>
+        </AdminLayout>
     );
 }

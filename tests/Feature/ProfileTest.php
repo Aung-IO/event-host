@@ -9,14 +9,14 @@ describe('Profile Page', function () {
     test('authenticated user can view profile page', function () {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('profile.show'));
+        $response = $this->actingAs($user)->get(route('user.profile'));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/profile/profile'));
+        $response->assertInertia(fn ($page) => $page->component('feats/user/user-profile'));
     });
 
     test('guest is redirected to login when accessing profile', function () {
-        $response = $this->get(route('profile.show'));
+        $response = $this->get(route('user.profile'));
 
         $response->assertRedirect(route('login.create'));
     });

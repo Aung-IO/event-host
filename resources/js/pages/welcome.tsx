@@ -1,7 +1,8 @@
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, Clock } from 'lucide-react';
 
 type Event = {
     id: number;
@@ -65,9 +66,16 @@ export default function LandingPage() {
                                 <CardHeader>
                                     <Badge className="mb-2 w-fit">{event.category}</Badge>
                                     <CardTitle>{event.title}</CardTitle>
+                                    <CardDescription>Aung Pyae Kyaw | Frontend Developer</CardDescription>
                                 </CardHeader>
+                                {/* <img src={Image} alt="" /> */}
                                 <CardContent>
-                                    <p className="text-sm text-muted-foreground">{event.date}</p>
+                                    <p className="text-sm text-muted-foreground flex items-center">
+                                        <Calendar className="mr-2 h-4 w-4" />
+                                        {event.date}</p>
+                                    <p className="text-sm text-muted-foreground flex items-center">
+                                        <Clock className="mr-2 h-4 w-4" />
+                                        10:30 AM - 12:30 PM</p>
                                     <p className="text-sm text-muted-foreground">{event.location}</p>
                                     <Button className="mt-4 w-full">View Details</Button>
                                 </CardContent>

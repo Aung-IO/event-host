@@ -1,11 +1,18 @@
+import { Link, router, usePage } from '@inertiajs/react';
+import { format } from 'date-fns';
+import { Calendar, Clock, Pencil, Trash2 } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { show as showEvent } from '@/routes/events';
 import hostEvents from '@/routes/host/events';
-import { Link, router, usePage } from '@inertiajs/react';
-import { Pencil, Trash2 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
-export default function EventCard({ event }: { event: any }) {
+interface EventCardProps {
+    event: any;
+}
+
+export default function EventCard({ event }: EventCardProps) {
     const { auth } = usePage().props as any;
     const isOwner = auth?.user?.id === event.host_id;
 
@@ -19,20 +26,27 @@ export default function EventCard({ event }: { event: any }) {
 
     return (
         <Link href={showEvent(event.id).url}>
-            <div className="group cursor-pointer">
-                {/* Image */}
-                <div className="relative aspect-3/2 overflow-hidden rounded-lg">
-                    <img
-                        src={`/storage/${event.image}`}
-                        alt={event.title}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                    />
+            <Card key={event.id} className="transition hover:shadow-lg">
+                <CardHeader>
+                    <Badge className="mb-2 w-fit">{event.category}</Badge>
+                    <CardTitle>{event.title}</CardTitle>
+                    <CardDescription className={cn('pt-0 text-xs')}>Aung Pyae Kyaw | Frontend Developer</CardDescription>
+                </CardHeader>
+               
+                <CardContent className={cn('space-y-2')}>
+                    <p className="flex items-center text-xs text-muted-foreground">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        {format(event.start_date, 'MMM dd, yyyy')} - {format(event.end_date, 'MMM dd, yyyy')}
+                    </p>
+                    <p className="flex items-center text-xs text-muted-foreground">
+                        <Clock className="mr-2 h-4 w-4" />
+                        {format(event.start_date, 'hh:mm a')} - {format(event.end_date, 'hh:mm a')}
+                    </p>
+                    <p className="text-sm text-muted-foreground">{event.location}</p>
+                    <Button className="mt-4 w-full">View Details</Button>
 
-                    <Badge className="absolute top-3 right-3 bg-gray-600">{event.category}</Badge>
-
-                    {/* Edit / Delete buttons — visible only to the owner */}
                     {isOwner && (
-                        <div className="absolute right-2 bottom-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                        <div className="mt-4 flex justify-end gap-1">
                             <Link href={hostEvents.edit(event.id).url} onClick={(e) => e.stopPropagation()}>
                                 <Button size="icon" variant="secondary" className="h-7 w-7">
                                     <Pencil className="h-3.5 w-3.5" />
@@ -43,14 +57,8 @@ export default function EventCard({ event }: { event: any }) {
                             </Button>
                         </div>
                     )}
-                </div>
-
-                {/* Content */}
-                <div>
-                    <span className="line-clamp-1 text-base font-semibold">{event.title}</span>
-                    <span className="text-xs text-muted-foreground">{event.location}</span>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
         </Link>
     );
 }

@@ -10,21 +10,21 @@ use Inertia\Inertia;
 class ProfileController extends Controller
 {
     /**
-     * Show the profile page.
-     */
-    public function show(Request $request)
-    {
-        return Inertia::render('feats/profile/profile', [
-            'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
-        ]);
-    }
-
-    /**
      * Show the host profile page.
      */
     public function showHost(Request $request)
     {
         return Inertia::render('feats/host/host-profile', [
+            'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
+        ]);
+    }
+
+    /**
+     * Show the admin profile page.
+     */
+    public function showAdmin(Request $request)
+    {
+        return Inertia::render('feats/admin/admin-profile', [
             'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
         ]);
     }

@@ -39,40 +39,42 @@ Route::middleware('auth')->group(function () {
     Route::delete('logout', [SessionsController::class, 'destroy'])
         ->name('logout');
 
-    // Admin Dashboard - Only accessible by admin role
-    Route::middleware('admin')->group(function () {
-        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('admin.dashboard');
-        Route::get('/admin/users', [AdminDashboardController::class, 'users'])
-            ->name('admin.users');
-        Route::post('/admin/users/{user}/reset-password', [AdminDashboardController::class, 'resetPassword'])
-            ->name('admin.users.reset-password');
-        Route::post('/admin/users/{user}/change-role', [AdminDashboardController::class, 'changeRole'])
-            ->name('admin.users.change-role');
-    });
-
-    // Host Dashboard - Only accessible by host role
-    Route::middleware('host')->prefix('host')->name('host.')->group(function () {
-        Route::get('/dashboard', [HostDashboardController::class, 'index'])
-            ->name('dashboard');                          // → host.dashboard
-        Route::resource('events', EventController::class); // → host.events.*
-        Route::get('/my-events', [EventController::class, 'myEvents'])
-            ->name('my-events');
-        // Host profile routes
-        Route::get('/profile', [ProfileController::class, 'showHost'])
-            ->name('profile');                            // → host.profile
-    });
-
-    // User Dashboard - Accessible by all authenticated users
-    Route::get('/dashboard', function () {
-        return Inertia::render('feats/user/dashboard');
-    })->name('dashboard');
-
-    // Profile routes - accessible by all authenticated users
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    // Shared profile mutation routes — accessible by all authenticated users
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
     Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
-    // User-specific profile view
-    Route::get('/user/profile', [ProfileController::class, 'showUser'])->name('user.profile');
+
+    // Admin routes — only accessible by admin role
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');                              // → admin.dashboard
+        Route::get('/users', [AdminDashboardController::class, 'users'])
+            ->name('users');                                  // → admin.users
+        Route::post('/users/{user}/reset-password', [AdminDashboardController::class, 'resetPassword'])
+            ->name('users.reset-password');                   // → admin.users.reset-password
+        Route::post('/users/{user}/change-role', [AdminDashboardController::class, 'changeRole'])
+            ->name('users.change-role');                      // → admin.users.change-role
+        Route::get('/profile', [ProfileController::class, 'showAdmin'])
+            ->name('profile');                                // → admin.profile
+    });
+
+    // Host routes — only accessible by host role
+    Route::middleware('host')->prefix('host')->name('host.')->group(function () {
+        Route::get('/dashboard', [HostDashboardController::class, 'index'])
+            ->name('dashboard');                              // → host.dashboard
+        Route::resource('events', EventController::class);   // → host.events.*
+        Route::get('/my-events', [EventController::class, 'myEvents'])
+            ->name('my-events');                              // → host.my-events
+        Route::get('/profile', [ProfileController::class, 'showHost'])
+            ->name('profile');                                // → host.profile
+    });
+
+    // User routes — accessible by regular users
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/dashboard', function () {
+            return Inertia::render('feats/user/dashboard');
+        })->name('dashboard');                                // → user.dashboard
+        Route::get('/profile', [ProfileController::class, 'showUser'])
+            ->name('profile');                                // → user.profile
+    });
 });

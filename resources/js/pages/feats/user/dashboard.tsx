@@ -29,9 +29,9 @@ export default function UserDashboard() {
                     <div className="mb-8">
                         <div className="mb-2 flex items-center gap-3">
                             <h1 className="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
-                                Host Dashboard
+                                User Dashboard
                             </h1>
-                            <Badge className="bg-purple-500">Host</Badge>
+                            <Badge className="bg-purple-500">User</Badge>
                         </div>
                         <p className="text-slate-600">Welcome back, {auth.user.name}. Manage your events and engage with attendees.</p>
                     </div>

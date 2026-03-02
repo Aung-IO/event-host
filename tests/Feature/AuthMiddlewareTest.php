@@ -4,13 +4,13 @@ use App\Models\User;
 
 describe('Auth Middleware', function () {
     test('unauthenticated user cannot access dashboard', function () {
-        $response = $this->get(route('dashboard'));
+        $response = $this->get(route('user.dashboard'));
 
         $response->assertRedirect(route('login.create'));
     });
 
     test('unauthenticated user is redirected to login page', function () {
-        $response = $this->get(route('dashboard'));
+        $response = $this->get(route('user.dashboard'));
 
         $response->assertRedirect(route('login.create'));
         $this->assertGuest();
@@ -20,17 +20,17 @@ describe('Auth Middleware', function () {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->get(route('dashboard'));
+        $response = $this->get(route('user.dashboard'));
 
         $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('dashboard'));
+        $response->assertInertia(fn ($page) => $page->component('feats/user/dashboard'));
     });
 
     test('authenticated user can access protected routes', function () {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->get(route('dashboard'));
+        $response = $this->get(route('user.dashboard'));
 
         $response->assertOk();
         $this->assertAuthenticatedAs($user);

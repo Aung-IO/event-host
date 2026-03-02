@@ -1,3 +1,5 @@
+import { Link, usePage } from '@inertiajs/react';
+import { Calendar, CalendarCheck, CreditCard, FileText, LayoutDashboard, Settings, Users } from 'lucide-react';
 import {
     Sidebar,
     SidebarContent,
@@ -17,9 +19,6 @@ import {
 } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 import admin from '@/routes/admin';
-import profile from '@/routes/profile';
-import { Link, usePage } from '@inertiajs/react';
-import { Calendar, CalendarCheck, CreditCard, FileText, LayoutDashboard, Settings, Users } from 'lucide-react';
 
 type PageProps = {
     auth: {
@@ -107,7 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" className="cursor-default select-none">
-                                <Link href={profile.show.url()} className="flex items-center justify-center gap-2">
+                                <Link href={admin.profile.url()} className="flex items-center justify-center gap-2">
                                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-purple-600 text-xs font-bold text-white">
                                         {auth.user.avatar ? (
                                             <img
