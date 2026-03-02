@@ -70,12 +70,14 @@ export default function LandingPage() {
                                 </CardHeader>
                                 {/* <img src={Image} alt="" /> */}
                                 <CardContent>
-                                    <p className="text-sm text-muted-foreground flex items-center">
+                                    <p className="flex items-center text-sm text-muted-foreground">
                                         <Calendar className="mr-2 h-4 w-4" />
-                                        {event.date}</p>
-                                    <p className="text-sm text-muted-foreground flex items-center">
+                                        {event.date}
+                                    </p>
+                                    <p className="flex items-center text-sm text-muted-foreground">
                                         <Clock className="mr-2 h-4 w-4" />
-                                        10:30 AM - 12:30 PM</p>
+                                        10:30 AM - 12:30 PM
+                                    </p>
                                     <p className="text-sm text-muted-foreground">{event.location}</p>
                                     <Button className="mt-4 w-full">View Details</Button>
                                 </CardContent>

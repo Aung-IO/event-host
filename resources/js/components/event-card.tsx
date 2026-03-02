@@ -33,9 +33,7 @@ export default function EventCard({ event }: EventCardProps) {
                     {event.tags && event.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
                             {event.tags.map((tag: string) => (
-                                <Badge key={tag}>
-                                    {tag}
-                                </Badge>
+                                <Badge key={tag}>{tag}</Badge>
                             ))}
                         </div>
                     )}

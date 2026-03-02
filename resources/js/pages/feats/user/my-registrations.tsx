@@ -24,10 +24,7 @@ interface Registration {
 export default function MyRegistrations({ registrations }: { registrations: Registration[] }) {
     return (
         <UserLayout>
-            
             <div>
-                
-
                 {registrations.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-4 py-24 text-center text-muted-foreground">
                         <CalendarDays className="h-12 w-12 opacity-30" />
