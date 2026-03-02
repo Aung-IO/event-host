@@ -1,12 +1,28 @@
-import { useForm } from '@inertiajs/react';
 import { store } from '@/actions/App/Http/Controllers/EventController';
 import Header from '@/components/header';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useForm } from '@inertiajs/react';
 import HostLayout from '../host/host-layout';
+
+const PREDEFINED_TAGS = [
+    'Music',
+    'Technology',
+    'Sports',
+    'Arts & Culture',
+    'Food & Drink',
+    'Business',
+    'Health & Wellness',
+    'Education',
+    'Networking',
+    'Entertainment',
+    'Outdoor',
+    'Charity',
+];
 
 export default function CreateEvent() {
     const { data, setData, processing, errors, submit } = useForm({
@@ -16,8 +32,15 @@ export default function CreateEvent() {
         end_date: '',
         location: '',
         capacity: '',
+        tags: [] as string[],
         image: null as File | null,
     });
+
+    function toggleTag(tag: string) {
+        const current = data.tags;
+        const updated = current.includes(tag) ? current.filter((t) => t !== tag) : [...current, tag];
+        setData('tags', updated);
+    }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -116,6 +139,28 @@ export default function CreateEvent() {
                                         className={errors.capacity ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.capacity && <p className="text-sm text-red-500">{errors.capacity}</p>}
+                                </div>
+
+                                {/* Tags */}
+                                <div className="space-y-2">
+                                    <Label>Tags</Label>
+                                    <p className="text-xs text-muted-foreground">Select one or more tags that describe your event.</p>
+                                    <div className="flex flex-wrap gap-2 pt-1">
+                                        {PREDEFINED_TAGS.map((tag) => {
+                                            const selected = data.tags.includes(tag);
+                                            return (
+                                                <Badge
+                                                    key={tag}
+                                                    variant={selected ? 'default' : 'outline'}
+                                                    className="cursor-pointer transition-colors select-none"
+                                                    onClick={() => toggleTag(tag)}
+                                                >
+                                                    {tag}
+                                                </Badge>
+                                            );
+                                        })}
+                                    </div>
+                                    {errors.tags && <p className="text-sm text-red-500">{errors.tags}</p>}
                                 </div>
 
                                 {/* Image Upload */}

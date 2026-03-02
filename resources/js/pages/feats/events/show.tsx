@@ -1,13 +1,10 @@
-import { Star, MessageSquareText, CircleUser, MapIcon, Wallet } from 'lucide-react';
-import Image1 from '../../../../../public/images/img1.jpg';
-import Image2 from '../../../../../public/images/img2.jpg';
-import Image3 from '../../../../../public/images/img3.jpg';
-import Image4 from '../../../../../public/images/img4.jpg';
 import Header from '@/components/header';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { CircleUser, MapIcon, MessageSquareText, Star } from 'lucide-react';
 
 export default function EventDetailPage({ event }: { event: any }) {
     return (
@@ -88,6 +85,20 @@ export default function EventDetailPage({ event }: { event: any }) {
                                     <div className="h-2 w-full rounded-full bg-muted">
                                         <div className="h-2 w-[75%] rounded-full bg-primary" />
                                     </div>
+
+                                    {/* Tags */}
+                                    {event.tags && event.tags.length > 0 && (
+                                        <div className="space-y-1.5">
+                                            <span className="text-sm text-muted-foreground">Tags</span>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {event.tags.map((tag: string) => (
+                                                    <Badge key={tag}>
+                                                        {tag}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <Button className="w-full" size="lg">
                                         Join Event

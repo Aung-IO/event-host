@@ -13,6 +13,8 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
+    console.log(event.tags);
+
     const { auth } = usePage().props as any;
     const isOwner = auth?.user?.id === event.host_id;
 
@@ -28,11 +30,19 @@ export default function EventCard({ event }: EventCardProps) {
         <Link href={showEvent(event.id).url}>
             <Card key={event.id} className="transition hover:shadow-lg">
                 <CardHeader>
-                    <Badge className="mb-2 w-fit">{event.category}</Badge>
+                    {event.tags && event.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {event.tags.map((tag: string) => (
+                                <Badge key={tag}>
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
+                    )}
                     <CardTitle>{event.title}</CardTitle>
                     <CardDescription className={cn('pt-0 text-xs')}>Aung Pyae Kyaw | Frontend Developer</CardDescription>
                 </CardHeader>
-               
+
                 <CardContent className={cn('space-y-2')}>
                     <p className="flex items-center text-xs text-muted-foreground">
                         <Calendar className="mr-2 h-4 w-4" />

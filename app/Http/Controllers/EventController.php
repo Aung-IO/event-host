@@ -14,6 +14,7 @@ class EventController extends Controller
     public function index()
     {
         $allEvents = Event::all();
+
         return Inertia::render('feats/events/index', [
             'allEvents' => $allEvents,
         ]);
@@ -22,11 +23,11 @@ class EventController extends Controller
     public function myEvents()
     {
         $myEvents = Event::where('host_id', auth()->id())->get();
+
         return Inertia::render('feats/events/my-events', [
             'myEvents' => $myEvents,
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -40,7 +41,13 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
+        $validTags = [
+            'Music', 'Technology', 'Sports', 'Arts & Culture', 'Food & Drink',
+            'Business', 'Health & Wellness', 'Education', 'Networking',
+            'Entertainment', 'Outdoor', 'Charity',
+        ];
+
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
@@ -48,18 +55,18 @@ class EventController extends Controller
             'end_date' => ['required', 'date'],
             'location' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string', 'in:'.implode(',', $validTags)],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
         $imagePath = $request->file('image')->store('events', 'public');
-
 
         Event::create([
             ...$request->except('image'),
             'image' => $imagePath,
             'host_id' => auth()->id(),
         ]);
-
 
         return redirect()->route('host.my-events');
     }
@@ -89,14 +96,22 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        $validTags = [
+            'Music', 'Technology', 'Sports', 'Arts & Culture', 'Food & Drink',
+            'Business', 'Health & Wellness', 'Education', 'Networking',
+            'Entertainment', 'Outdoor', 'Charity',
+        ];
+
         $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'start_date'  => ['required', 'date'],
-            'end_date'    => ['required', 'date'],
-            'location'    => ['required', 'string', 'max:255'],
-            'capacity'    => ['required', 'integer', 'min:1'],
-            'image'       => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
+            'location' => ['required', 'string', 'max:255'],
+            'capacity' => ['required', 'integer', 'min:1'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string', 'in:'.implode(',', $validTags)],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
         $data = $request->except('image');

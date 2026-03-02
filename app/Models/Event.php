@@ -7,20 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-    'title',
-    'description',
-    'start_date',
-    'end_date',
-    'location',
-    'capacity',
-    'image',
-    'reject_reason',
-    'host_id',
-];
+        'title',
+        'description',
+        'start_date',
+        'end_date',
+        'location',
+        'capacity',
+        'tags',
+        'image',
+        'reject_reason',
+        'host_id',
+    ];
 
-public function user()
-{
-    return $this->belongsTo(User::class);
+    protected $casts = [
+        'tags' => 'array',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 
-}
