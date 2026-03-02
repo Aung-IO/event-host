@@ -32,6 +32,7 @@ export default function CreateEvent() {
         end_date: '',
         location: '',
         capacity: '',
+        price: '',
         tags: [] as string[],
         image: null as File | null,
     });
@@ -139,6 +140,21 @@ export default function CreateEvent() {
                                         className={errors.capacity ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.capacity && <p className="text-sm text-red-500">{errors.capacity}</p>}
+                                </div>
+
+                                {/* Price */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="price">Price (MMK)</Label>
+                                    <Input
+                                        id="price"
+                                        type="number"
+                                        min={0}
+                                        value={data.price}
+                                        onChange={(e) => setData('price', e.target.value)}
+                                        placeholder="0 for free events"
+                                        className={errors.price ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                                    />
+                                    {errors.price && <p className="text-sm text-red-500">{errors.price}</p>}
                                 </div>
 
                                 {/* Tags */}

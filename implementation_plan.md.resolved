@@ -1,0 +1,143 @@
+# Event Host – Remaining Features Implementation Plan
+
+The project already has the `events` table with `status`, `approved_by`, `approved_at`, `rejected_at`, and `reject_reason` columns — so the approval DB schema is already done. The [show.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/events/show.tsx) page has a placeholder "Join Event" button and hardcoded spot counts. These three features wire everything up properly.
+
+---
+
+## Feature A – User Event Registration (Join / Leave)
+
+### Backend
+
+#### [NEW] `create_event_registrations_table` migration
+- Columns: `id`, `event_id` (FK → events), `user_id` (FK → users), `status` (enum: registered/cancelled), `joined_at`, `timestamps`
+- Unique constraint: [(event_id, user_id)](file:///Users/apwiz/msc/web/project/event-host/database/migrations/2026_02_19_094228_create_events_table.php#9-32) — one registration per user per event
+
+#### [NEW] `EventRegistration.php` model
+- `belongsTo(Event)`, `belongsTo(User)`
+- `$fillable`: `event_id`, `user_id`, `status`, `joined_at`
+
+#### [MODIFY] [Event.php](file:///Users/apwiz/msc/web/project/event-host/app/Models/Event.php)
+- Add `hasMany(EventRegistration::class)` relationship
+- Add `registrations_count` via `withCount` (not a local attribute — loaded by controller)
+
+#### [NEW] `EventRegistrationController.php`
+- [store(Event $event)](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php#40-73) – join: validate not full, not already registered, event is approved; create record
+- [destroy(Event $event)](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php#128-137) – leave: find and delete/cancel the registration
+- [index()](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/AdminDashboardController.php#14-21) – list events the authenticated user has joined → renders `feats/user/my-registrations`
+
+#### [MODIFY] [EventController.php](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php) ([show](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php#74-83))
+- Eager-load `registrations_count` and check if `auth()->user()` has a registration (`userRegistered`)
+- Pass both values to Inertia
+
+#### [MODIFY] [web.php](file:///Users/apwiz/msc/web/project/event-host/routes/web.php)
+- Under `user.` middleware group:
+  - `POST /user/events/{event}/join` → `EventRegistrationController@store`
+  - `DELETE /user/events/{event}/leave` → `EventRegistrationController@destroy`
+  - `GET /user/my-registrations` → `EventRegistrationController@index`
+
+### Frontend
+
+#### [MODIFY] [show.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/events/show.tsx)
+- Replace hardcoded spots with `event.capacity` and `event.registrations_count`
+- Real progress bar fill: [(registrations_count / capacity) * 100](file:///Users/apwiz/msc/web/project/event-host/database/migrations/2026_02_19_094228_create_events_table.php#9-32)%
+- "Join Event" / "Leave Event" toggle based on `userRegistered` prop
+- Disable button + show "Full" badge when `registrations_count >= capacity`
+- Sonner toast on success/error
+
+#### [NEW] `feats/user/my-registrations.tsx`
+- Table/card list of events the user has joined
+- Show event title, date, location, status badge
+
+---
+
+## Feature B – Admin Event Approval
+
+> [!NOTE]
+> The `events` table already has all needed columns (`status`, `approved_by`, `approved_at`, `rejected_at`, `reject_reason`). No new migration needed.
+
+### Backend
+
+#### [NEW] `AdminEventController.php`
+- [index()](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/AdminDashboardController.php#14-21) – list all events with host info, filter by status query param
+- `approve(Event $event)` – set `status=approved`, `approved_by`, `approved_at`
+- `reject(Request $request, Event $event)` – validate `reject_reason`, set `status=rejected`, `rejected_at`, `reject_reason`
+
+#### [MODIFY] [EventController.php](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php)
+- [index()](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/AdminDashboardController.php#14-21): only show `approved` events (public listing)
+- [show()](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php#74-83): return 404 if event is not `approved`. Exception: allow host to see own pending/rejected events
+- [store()](file:///Users/apwiz/msc/web/project/event-host/app/Http/Controllers/EventController.php#40-73): after creating, redirect with a "pending approval" flash message
+
+#### [MODIFY] [web.php](file:///Users/apwiz/msc/web/project/event-host/routes/web.php)
+- Under `admin.` middleware group:
+  - `GET /admin/events` → `AdminEventController@index`
+  - `POST /admin/events/{event}/approve` → `AdminEventController@approve`
+  - `POST /admin/events/{event}/reject` → `AdminEventController@reject`
+
+### Frontend
+
+#### [NEW] `feats/admin/events.tsx`
+- Table with columns: Title, Host name, Status badge, Created At, Actions
+- Filter tabs: All / Pending / Approved / Rejected
+- **Approve** button → Inertia POST to approve route
+- **Reject** button → opens Dialog with textarea for reject reason → Inertia POST
+
+#### [MODIFY] [admin-layout.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/admin/admin-layout.tsx)
+- Add "Events" link in the sidebar nav
+
+#### [MODIFY] [show.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/events/show.tsx)
+- If event `status === 'pending'`, show a yellow info banner: "This event is awaiting admin approval and is not yet publicly visible."
+- If event `status === 'rejected'`, show a red banner with `reject_reason`
+
+#### [MODIFY] [my-events.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/events/my-events.tsx) (host)
+- Show status badge (Pending / Approved / Rejected) next to each event
+- If rejected, show the reject reason in a collapsible tooltip or inline text
+
+---
+
+## Feature C – Real-Time Available Spots (Polling)
+
+### Approach: Inertia Partial Reload Polling
+No WebSockets or extra infra needed — uses Inertia's `router.reload({ only: ['event'] })` on a timer.
+
+#### [MODIFY] [show.tsx](file:///Users/apwiz/msc/web/project/event-host/resources/js/pages/feats/events/show.tsx)
+- `useEffect` with `setInterval` polling every 15 seconds:
+  ```ts
+  router.reload({ only: ['event'] })
+  ```
+- Animate the progress bar with CSS `transition`
+- Show "Filling up fast! 🔥" badge when `< 20%` spots remain
+- Clean up interval on unmount
+
+---
+
+## Verification Plan
+
+### Automated Tests
+```bash
+# Run all PHP feature tests
+php artisan test
+
+# Or run a specific feature test file (after creating it)
+php artisan test --filter EventRegistrationTest
+```
+
+### Manual Verification Steps
+
+**Feature A – Join Event:**
+1. Log in as a user (role: [user](file:///Users/apwiz/msc/web/project/event-host/app/Models/Event.php#26-30)) and navigate to an approved event's detail page.
+2. Click **"Join Event"** → should show a success toast and button should change to **"Leave Event"**.
+3. Click **"Leave Event"** → should revert back to "Join Event".
+4. Open another browser window and join the same event; confirm the available spot count decrements.
+5. Fill the event to capacity. Confirm the button shows **"Event Full"** and is disabled.
+
+**Feature B – Admin Approval:**
+1. Log in as a host and create a new event. After submit, you should see a "pending approval" message and the event should appear with a **Pending** badge in My Events.
+2. Log in as admin → go to `/admin/events` → the new event should appear under **Pending** tab.
+3. Click **Approve** → event status changes to Approved. Event should now appear on the public events listing page.
+4. Create another event as host → log in as admin → click **Reject** → enter a reason → submit. Host should see the **Rejected** badge and the reason in My Events.
+5. Navigate to a **pending** event's public URL → should see a banner or 404 (not publicly visible).
+
+**Feature C – Real-Time Spots:**
+1. Open an event detail page in two browser tabs.
+2. In one tab, join the event.
+3. Within ~15 seconds, the other tab should automatically update the spot count without a manual refresh.

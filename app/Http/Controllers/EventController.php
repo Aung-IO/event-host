@@ -55,6 +55,7 @@ class EventController extends Controller
             'end_date' => ['required', 'date'],
             'location' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
+            'price' => ['required', 'integer', 'min:0'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'in:'.implode(',', $validTags)],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
@@ -76,6 +77,8 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        $event->loadCount('registrations');
+
         return Inertia::render('feats/events/show', [
             'event' => $event,
         ]);
@@ -109,6 +112,7 @@ class EventController extends Controller
             'end_date' => ['required', 'date'],
             'location' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'integer', 'min:1'],
+            'price' => ['required', 'integer', 'min:0'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'in:'.implode(',', $validTags)],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],

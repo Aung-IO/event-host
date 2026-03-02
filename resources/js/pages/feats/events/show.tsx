@@ -1,167 +1,165 @@
+import { router } from '@inertiajs/react';
+import { CircleUser, Star } from 'lucide-react';
+import { useEffect } from 'react';
+
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import { CircleUser, MapIcon, MessageSquareText, Star } from 'lucide-react';
 
-export default function EventDetailPage({ event }: { event: any }) {
+interface Event {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    location: string;
+    start_date: string;
+    capacity: number;
+    price: number;
+    available_spots: number;
+    tags?: string[];
+}
+
+export default function EventDetailPage({ event }: { event: Event }) {
+    const taken = event.capacity - event.available_spots;
+    const fillPct = event.capacity > 0 ? Math.min(100, (taken / event.capacity) * 100) : 0;
+    const isAlmostFull = event.capacity > 0 && event.available_spots / event.capacity < 0.2;
+    const isFull = event.available_spots <= 0;
+
+    // Real-time polling: reload just the event prop every 15 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            router.reload({ only: ['event'] });
+        }, 15_000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div>
             <Header />
             <div className="px-10 py-10">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <div className="col-span-2 grid grid-cols-2 gap-1.5">
-                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                        <img src={`/storage/${event.image}`} alt="Hero mindset" className="h-full w-full rounded-md object-cover" />
-                    </div>
+                {/* Hero Image */}
+                <div className="relative">
+                    <img src={`/storage/${event.image}`} alt={event.title} className="h-[420px] w-full rounded-2xl object-cover" />
 
-                    <div className="flex justify-center">
-                        <div className="text-cente space-y-6">
-                            <div>
-                                <h1 className="text-3xl font-bold">Must-Try: Hidden Yangon Bike and Food Tour</h1>
-                                <p className="mt-8 text-muted-foreground">
-                                    Discover local culture by bike - hidden gems, street food, lunch or dinner, and real neighborhood charm.
-                                </p>
-                            </div>
-
-                            <div className="flex items-center justify-center gap-2">
-                                <span className="flex items-center justify-center gap-1">
-                                    <Star className="h-4 w-4 stroke-amber-400" /> 4.96
-                                </span>
-                                <span>.</span>
-                                <span className="flex items-center justify-center gap-1">
-                                    <MessageSquareText className="h-4 w-4" />
-                                    100 reviews
-                                </span>
-                            </div>
-
-                            <Separator />
-
-                            <div className="flex items-center justify-start gap-4">
-                                <CircleUser className="h-10 w-10" />
-
-                                <div className="flex flex-col items-start">
-                                    <span className="text-lg font-semibold">Hosted by Aung Pyae</span>
-                                    <span className="text-base font-light text-gray-500">we live, we code, we eat</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center justify-start gap-4">
-                                <MapIcon className="h-10 w-10" />
-
-                                <div className="flex flex-col items-start">
-                                    <span className="text-lg font-semibold">Must Try Yangon Tour</span>
-                                    <span className="text-base font-light text-gray-500">San Chung, Yangon</span>
-                                </div>
-                            </div>
-
-                            <Card className="mt-6 text-left">
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-xl">Event Details</CardTitle>
-                                        <span className="font-semibold">
-                                            20,000 MMK / <span className="text-base font-light text-gray-500">guest</span>
-                                        </span>
-                                    </div>
-                                </CardHeader>
-
-                                <CardContent className="space-y-4">
-                                    {/* Start Date */}
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-muted-foreground">Start Date</span>
-                                        <span className="font-semibold">March 10, 2026 • 9:00 AM</span>
-                                    </div>
-
-                                    {/* Capacity */}
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-muted-foreground">Available Spots</span>
-                                        <span className="font-semibold">5 / 20 left</span>
-                                    </div>
-
-                                    {/* Progress Bar */}
-                                    <div className="h-2 w-full rounded-full bg-muted">
-                                        <div className="h-2 w-[75%] rounded-full bg-primary" />
-                                    </div>
-
-                                    {/* Tags */}
-                                    {event.tags && event.tags.length > 0 && (
-                                        <div className="space-y-1.5">
-                                            <span className="text-sm text-muted-foreground">Tags</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {event.tags.map((tag: string) => (
-                                                    <Badge key={tag}>
-                                                        {tag}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <Button className="w-full" size="lg">
-                                        Join Event
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </div>
+                    <div className="absolute bottom-6 left-6 rounded-xl bg-white/90 px-4 py-2 shadow backdrop-blur-md">
+                        <span className="text-sm font-medium text-muted-foreground">{event.location}</span>
                     </div>
                 </div>
-                <div className="gird-cols-1 mt-4 grid gap-4 md:grid-cols-3">
-                    <div className="flex flex-col justify-between">
-                        <div>
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Meet Your Host</CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex flex-col items-start gap-6 md:flex-row">
-                                    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-muted">
-                                        <CircleUser className="h-12 w-12" />
-                                    </div>
 
-                                    <div className="space-y-3">
-                                        <h3 className="text-xl font-semibold">Aung Pyae</h3>
+                {/* Title + Rating */}
+                <div className="mt-8 space-y-3">
+                    <h1 className="text-4xl font-bold tracking-tight">{event.title}</h1>
 
-                                        <p className="text-muted-foreground">
-                                            I’ve been hosting cultural bike tours in Yangon for over 5 years. My mission is to connect travelers with
-                                            authentic food and hidden neighborhoods.
-                                        </p>
-
-                                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                            <span>⭐ 4.9 rating</span>
-                                            <span>•</span>
-                                            <span>120 events hosted</span>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                            <span className="font-medium text-foreground">4.9</span>
                         </div>
-                        <div>
-                            <Button className="w-full" size="lg">
-                                Message Host
-                            </Button>
+                        <span>•</span>
+                        <span>120 reviews</span>
+                        <span>•</span>
+                        <span>{event.location}</span>
+                    </div>
+                </div>
+
+                {/* Booking Card */}
+                <Card className="sticky top-24 mt-6 rounded-2xl shadow-lg">
+                    <CardContent className="space-y-5 p-6">
+                        {/* Price + Spots badge */}
+                        <div className="flex items-baseline justify-between">
+                            <div>
+                                {event.price > 0 ? (
+                                    <>
+                                        <span className="text-2xl font-bold">{event.price.toLocaleString()} MMK</span>
+                                        <span className="text-sm text-muted-foreground"> / guest</span>
+                                    </>
+                                ) : (
+                                    <span className="text-2xl font-bold text-green-600">Free</span>
+                                )}
+                            </div>
+                            {isFull ? (
+                                <Badge variant="destructive">Event Full</Badge>
+                            ) : isAlmostFull ? (
+                                <Badge variant="destructive" className="animate-pulse">
+                                    Filling up fast 🔥
+                                </Badge>
+                            ) : (
+                                <Badge variant="secondary">{event.available_spots} spots left</Badge>
+                            )}
                         </div>
-                        <span className="text-center text-sm text-muted-foreground">
-                            To help you get the most out of this event, we recommend bringing a reusable water bottle and comfortable walking shoes.
-                        </span>
+
+                        <Separator />
+
+                        <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">Date</span>
+                                <span className="font-medium">{event.start_date}</span>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">Capacity</span>
+                                <span className="font-medium">
+                                    {event.available_spots} / {event.capacity} left
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Animated Progress Bar */}
+                        <div className="overflow-hidden rounded-full bg-muted" style={{ height: '8px' }}>
+                            <div
+                                className="h-full rounded-full bg-primary transition-all duration-700 ease-in-out"
+                                style={{ width: `${fillPct}%` }}
+                            />
+                        </div>
+
+                        {/* Tags */}
+                        {event.tags && event.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5">
+                                {event.tags.map((tag) => (
+                                    <Badge key={tag} variant="outline">
+                                        {tag}
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
+
+                        <Button size="lg" className="w-full rounded-xl" disabled={isFull}>
+                            {isFull ? 'Event Full' : 'Join Event'}
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                {/* Host */}
+                <div className="mt-12 flex items-start gap-6">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+                        <CircleUser className="h-8 w-8" />
                     </div>
 
-                    <div className="col-span-2">
-                        <Card className={cn('gap-3')}>
-                            <CardHeader>
-                                <CardTitle>Where we'll meet</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-muted-foreground"> Must-Try: Hidden Yangon Bike and Food Tour</p>
-                                <p className="font-semibold text-muted-foreground">San Chaung Township, Yangon</p>
-                            </CardContent>
-                            <CardContent className="space-y-4">
-                                <div className="overflow-hidden rounded-md">
-                                    <iframe src="https://www.google.com/maps?q=Yangon&output=embed" className="h-[350px] w-full" loading="lazy" />
-                                </div>
-                            </CardContent>
-                        </Card>
+                    <div>
+                        <h3 className="text-lg font-semibold">Hosted by Aung Pyae</h3>
+                        <p className="mt-2 max-w-xl text-muted-foreground">Fullstack Developer</p>
+
+                        <Button variant="outline" size="sm" className="mt-4 rounded-xl">
+                            Message Host
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Location */}
+                <div className="mt-16 space-y-4">
+                    <h2 className="text-2xl font-semibold">Where we'll meet</h2>
+
+                    <p className="text-muted-foreground">{event.location}</p>
+
+                    <div className="overflow-hidden rounded-2xl shadow-sm">
+                        <iframe
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(event.location)}&output=embed`}
+                            className="h-[350px] w-full"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </div>
