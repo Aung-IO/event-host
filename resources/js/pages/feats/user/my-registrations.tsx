@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import events from '@/routes/events';
+import UserLayout from './user-layout';
 
 interface Registration {
     id: number;
@@ -22,10 +23,10 @@ interface Registration {
 
 export default function MyRegistrations({ registrations }: { registrations: Registration[] }) {
     return (
-        <div className="min-h-screen">
-            <Header />
-            <div className="mx-auto max-w-3xl px-6 py-10">
-                <h1 className="mb-6 text-3xl font-bold tracking-tight">My Registered Events</h1>
+        <UserLayout>
+            
+            <div>
+                
 
                 {registrations.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-4 py-24 text-center text-muted-foreground">
@@ -74,6 +75,6 @@ export default function MyRegistrations({ registrations }: { registrations: Regi
                     </div>
                 )}
             </div>
-        </div>
+        </UserLayout>
     );
 }

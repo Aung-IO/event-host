@@ -1,4 +1,3 @@
-import { Link, usePage } from '@inertiajs/react';
 import {
     Sidebar,
     SidebarContent,
@@ -16,8 +15,10 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
+import events from '@/routes/events';
 import user from '@/routes/user';
-import { Bell, Bookmark, CalendarCheck, LayoutDashboard, User } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { Bell, Bookmark, CalendarCheck, LayoutDashboard } from 'lucide-react';
 
 type PageProps = {
     auth: {
@@ -38,10 +39,10 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { label: 'Dashboard',     href: user.dashboard.url(), icon: LayoutDashboard },
-    { label: 'Joined Events', href: '#',                  icon: CalendarCheck },
-    { label: 'Bookmarks',     href: '#',                  icon: Bookmark },
-    { label: 'Notifications', href: '#',                  icon: Bell, badge: 2 },
+    { label: 'Dashboard', href: user.dashboard.url(), icon: LayoutDashboard },
+    { label: 'Joined Events', href: events.myRegistrations.url(), icon: CalendarCheck },
+    { label: 'Bookmarks', href: '#', icon: Bookmark },
+    { label: 'Notifications', href: '#', icon: Bell, badge: 2 },
     // { label: 'My Profile',    href: user.profile.url(),   icon: User },
 ];
 
