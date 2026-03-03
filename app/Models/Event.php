@@ -37,7 +37,7 @@ class Event extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'host_id');
     }
 
     public function registrations()
@@ -45,4 +45,3 @@ class Event extends Model
         return $this->hasMany(\App\Models\EventRegistration::class);
     }
 }
-

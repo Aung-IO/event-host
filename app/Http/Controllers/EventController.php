@@ -78,6 +78,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         $event->loadCount('registrations');
+        $event->load('user:id,name,avatar');
 
         $userRegistered = auth()->check()
             ? $event->registrations()->where('user_id', auth()->id())->exists()

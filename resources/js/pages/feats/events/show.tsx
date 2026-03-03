@@ -9,6 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import events from '@/routes/events';
+import { formatDate } from 'date-fns';
+
+interface Host {
+    id: number;
+    name: string;
+    avatar?: string | null;
+}
 
 interface Event {
     id: number;
@@ -17,10 +24,12 @@ interface Event {
     image: string;
     location: string;
     start_date: string;
+    end_date: string;
     capacity: number;
     price: number;
     available_spots: number;
     tags?: string[];
+    user?: Host | null;
 }
 
 interface Props {
@@ -127,7 +136,15 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">Date</span>
-                                <span className="font-medium">{event.start_date}</span>
+                                <span className="font-medium">
+                                    {formatDate(event.start_date, 'MMM dd, yyyy')} - {formatDate(event.end_date, 'MMM dd, yyyy')}
+                                </span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-muted-foreground">Time</span>
+                                <span className="font-medium">
+                                    {formatDate(event.start_date, 'hh:mm a')} - {formatDate(event.end_date, 'hh:mm a')}
+                                </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">Capacity</span>
@@ -177,12 +194,15 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
 
                 {/* Host */}
                 <div className="mt-12 flex items-start gap-6">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                        <CircleUser className="h-8 w-8" />
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+                        {event.user?.avatar ? (
+                            <img src={`/storage/${event.user.avatar}`} alt={event.user.name} className="h-full w-full object-cover" />
+                        ) : (
+                            <CircleUser className="h-8 w-8" />
+                        )}
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold">Hosted by Aung Pyae</h3>
-                        <p className="mt-2 max-w-xl text-muted-foreground">Fullstack Developer</p>
+                        <h3 className="text-lg font-semibold">Hosted by {event.user?.name ?? 'Unknown'}</h3>
                         <Button variant="outline" size="sm" className="mt-4 rounded-xl">
                             Message Host
                         </Button>

@@ -95,7 +95,7 @@ export default function CreateEvent() {
                                         id="location"
                                         value={data.location}
                                         onChange={(e) => setData('location', e.target.value)}
-                                        placeholder="add URL"
+                                        placeholder="Junction City, Yangon"
                                         className={errors.location ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
@@ -137,6 +137,7 @@ export default function CreateEvent() {
                                         min={1}
                                         value={data.capacity}
                                         onChange={(e) => setData('capacity', e.target.value)}
+                                        onWheel={(e) => e.currentTarget.blur()}
                                         className={errors.capacity ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.capacity && <p className="text-sm text-red-500">{errors.capacity}</p>}
@@ -151,6 +152,7 @@ export default function CreateEvent() {
                                         min={0}
                                         value={data.price}
                                         onChange={(e) => setData('price', e.target.value)}
+                                        onWheel={(e) => e.currentTarget.blur()}
                                         placeholder="0 for free events"
                                         className={errors.price ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
