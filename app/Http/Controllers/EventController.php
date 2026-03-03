@@ -13,7 +13,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $allEvents = Event::all();
+        $allEvents = Event::where('status', 'approved')->get();
 
         return Inertia::render('feats/events/index', [
             'allEvents' => $allEvents,
@@ -22,7 +22,9 @@ class EventController extends Controller
 
     public function myEvents()
     {
-        $myEvents = Event::where('host_id', auth()->id())->get();
+        $myEvents = Event::where('host_id', auth()->id())
+            ->latest()
+            ->get(['id', 'host_id', 'title', 'description', 'start_date', 'end_date', 'location', 'image', 'capacity', 'price', 'tags', 'status', 'reject_reason', 'created_at']);
 
         return Inertia::render('feats/events/my-events', [
             'myEvents' => $myEvents,
@@ -65,11 +67,12 @@ class EventController extends Controller
 
         Event::create([
             ...$request->except('image'),
-            'image' => $imagePath,
+            'image'   => $imagePath,
             'host_id' => auth()->id(),
+            'status'  => 'pending',
         ]);
 
-        return redirect()->route('host.my-events');
+        return redirect()->route('host.my-events')->with('success', 'Event created! It is pending admin approval.');
     }
 
     /**

@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Calendar, CalendarCheck, CreditCard, FileText, LayoutDashboard, Settings, Users } from 'lucide-react';
+import { CalendarCheck, LayoutDashboard, Settings, Users } from 'lucide-react';
 import {
     Sidebar,
     SidebarContent,
@@ -35,20 +35,16 @@ type NavItem = {
     label: string;
     href: string;
     icon: React.ElementType;
-    badge?: number;
 };
 
 const adminNavItems: NavItem[] = [
     { label: 'Overview', href: admin.dashboard.url(), icon: LayoutDashboard },
-    { label: 'Event Approvals', href: '#', icon: CalendarCheck },
-    { label: 'All Events', href: '#', icon: Calendar },
+    { label: 'Event Approvals', href: admin.events.url(), icon: CalendarCheck },
     { label: 'Users', href: admin.users.url(), icon: Users },
-    { label: 'Reports', href: '#', icon: FileText },
-    { label: 'Payments', href: '#', icon: CreditCard },
     { label: 'Settings', href: '#', icon: Settings },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children, pendingCount }: { children: React.ReactNode; pendingCount?: number }) {
     const { auth } = usePage<PageProps>().props;
     const currentPath = window.location.pathname;
 
@@ -67,7 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                     </div>
                                     <div className="flex flex-col leading-none">
                                         <span className="text-sm font-semibold">EventHost</span>
-                                        <span className="text-xs text-muted-foreground">Host Portal</span>
+                                        <span className="text-xs text-muted-foreground">Admin Portal</span>
                                     </div>
                                 </Link>
                             </SidebarMenuButton>
@@ -84,6 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 {adminNavItems.map((item) => {
                                     const isActive = item.href !== '#' && currentPath === item.href;
                                     const Icon = item.icon;
+                                    const isPendingApprovals = item.label === 'Event Approvals';
                                     return (
                                         <SidebarMenuItem key={item.label}>
                                             <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
@@ -92,7 +89,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                                     <span>{item.label}</span>
                                                 </Link>
                                             </SidebarMenuButton>
-                                            {item.badge !== undefined && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
+                                            {isPendingApprovals && pendingCount !== undefined && pendingCount > 0 && (
+                                                <SidebarMenuBadge>{pendingCount}</SidebarMenuBadge>
+                                            )}
                                         </SidebarMenuItem>
                                     );
                                 })}

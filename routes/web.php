@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\SessionsController;
 use App\Http\Controllers\EventController;
@@ -65,6 +66,13 @@ Route::middleware('auth')->group(function () {
             ->name('users.change-role');                      // → admin.users.change-role
         Route::get('/profile', [ProfileController::class, 'showAdmin'])
             ->name('profile');                                // → admin.profile
+        // Event approvals
+        Route::get('/events', [AdminEventController::class, 'index'])
+            ->name('events');                                 // → admin.events
+        Route::post('/events/{event}/approve', [AdminEventController::class, 'approve'])
+            ->name('events.approve');                         // → admin.events.approve
+        Route::post('/events/{event}/reject', [AdminEventController::class, 'reject'])
+            ->name('events.reject');                          // → admin.events.reject
     });
 
     // Host routes — only accessible by host role

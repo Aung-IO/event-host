@@ -16,12 +16,18 @@ class Event extends Model
         'price',
         'tags',
         'image',
-        'reject_reason',
         'host_id',
+        'status',
+        'approved_by',
+        'approved_at',
+        'rejected_at',
+        'reject_reason',
     ];
 
     protected $casts = [
-        'tags' => 'array',
+        'tags'        => 'array',
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     protected $appends = ['available_spots'];

@@ -1,4 +1,5 @@
 import { router, useForm, usePage } from '@inertiajs/react';
+import { formatDate } from 'date-fns';
 import { CircleUser, Star } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import events from '@/routes/events';
-import { formatDate } from 'date-fns';
 
 interface Host {
     id: number;
