@@ -67,9 +67,9 @@ class EventController extends Controller
 
         Event::create([
             ...$request->except('image'),
-            'image'   => $imagePath,
+            'image' => $imagePath,
             'host_id' => auth()->id(),
-            'status'  => 'pending',
+            'status' => 'pending',
         ]);
 
         return redirect()->route('host.my-events')->with('success', 'Event created! It is pending admin approval.');
@@ -88,7 +88,7 @@ class EventController extends Controller
             : false;
 
         return Inertia::render('feats/events/show', [
-            'event'          => $event,
+            'event' => $event,
             'userRegistered' => $userRegistered,
         ]);
     }

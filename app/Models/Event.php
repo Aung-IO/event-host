@@ -25,7 +25,7 @@ class Event extends Model
     ];
 
     protected $casts = [
-        'tags'        => 'array',
+        'tags' => 'array',
         'approved_at' => 'datetime',
         'rejected_at' => 'datetime',
     ];

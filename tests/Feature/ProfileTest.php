@@ -27,15 +27,15 @@ describe('Profile Update', function () {
         $user = User::factory()->create(['name' => 'Old Name', 'email' => 'old@example.com']);
 
         $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name'  => 'New Name',
+            'name' => 'New Name',
             'email' => 'new@example.com',
         ]);
 
         $response->assertRedirect();
 
         $this->assertDatabaseHas('users', [
-            'id'    => $user->id,
-            'name'  => 'New Name',
+            'id' => $user->id,
+            'name' => 'New Name',
             'email' => 'new@example.com',
         ]);
     });
@@ -45,7 +45,7 @@ describe('Profile Update', function () {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name'  => 'Some Name',
+            'name' => 'Some Name',
             'email' => 'taken@example.com',
         ]);
 
@@ -56,7 +56,7 @@ describe('Profile Update', function () {
         $user = User::factory()->create(['email' => 'mine@example.com']);
 
         $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name'  => 'Same User',
+            'name' => 'Same User',
             'email' => 'mine@example.com',
         ]);
 
@@ -68,7 +68,7 @@ describe('Profile Update', function () {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->patch(route('profile.update'), [
-            'name'  => '',
+            'name' => '',
             'email' => $user->email,
         ]);
 
@@ -128,8 +128,8 @@ describe('Password Change', function () {
         ]);
 
         $response = $this->actingAs($user)->patch(route('profile.password'), [
-            'current_password'      => 'current-password',
-            'password'              => 'new-password-123',
+            'current_password' => 'current-password',
+            'password' => 'new-password-123',
             'password_confirmation' => 'new-password-123',
         ]);
 
@@ -145,8 +145,8 @@ describe('Password Change', function () {
         ]);
 
         $response = $this->actingAs($user)->patch(route('profile.password'), [
-            'current_password'      => 'wrong-password',
-            'password'              => 'new-password-123',
+            'current_password' => 'wrong-password',
+            'password' => 'new-password-123',
             'password_confirmation' => 'new-password-123',
         ]);
 
@@ -159,8 +159,8 @@ describe('Password Change', function () {
         ]);
 
         $response = $this->actingAs($user)->patch(route('profile.password'), [
-            'current_password'      => 'current-password',
-            'password'              => 'new-password-123',
+            'current_password' => 'current-password',
+            'password' => 'new-password-123',
             'password_confirmation' => 'different-password',
         ]);
 
@@ -173,8 +173,8 @@ describe('Password Change', function () {
         ]);
 
         $response = $this->actingAs($user)->patch(route('profile.password'), [
-            'current_password'      => 'current-password',
-            'password'              => 'short',
+            'current_password' => 'current-password',
+            'password' => 'short',
             'password_confirmation' => 'short',
         ]);
 

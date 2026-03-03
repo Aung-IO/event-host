@@ -19,7 +19,7 @@ class Authenticate
             if ($request->expectsJson()) {
                 abort(401);
             }
-            
+
             return redirect()->route('login.create');
         }
 

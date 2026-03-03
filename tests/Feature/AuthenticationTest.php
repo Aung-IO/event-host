@@ -19,7 +19,7 @@ describe('Registration', function () {
         ]);
 
         $response->assertRedirect(route('login.create'));
-        
+
         $this->assertDatabaseHas('users', [
             'name' => 'John Doe',
             'email' => 'john@example.com',

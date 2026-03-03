@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\EventRegistration;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class EventRegistrationController extends Controller
@@ -50,7 +49,7 @@ class EventRegistrationController extends Controller
 
         EventRegistration::create([
             'event_id' => $event->id,
-            'user_id'  => $user->id,
+            'user_id' => $user->id,
             'joined_at' => now(),
         ]);
 

@@ -71,7 +71,7 @@ export default function MyEvents({ myEvents }: { myEvents: MyEvent[] }) {
                     {myEvents.map((event) => {
                         const status = statusConfig[event.status] ?? statusConfig.pending;
                         return (
-                            <Card key={event.id} className={cn('overflow-hidden transition hover:shadow-lg py-0 gap-2')}>
+                            <Card key={event.id} className={cn('gap-2 overflow-hidden py-0 transition hover:shadow-lg')}>
                                 {/* Thumbnail */}
                                 <div className="relative h-36 w-full overflow-hidden">
                                     <img src={`/storage/${event.image}`} alt={event.title} className="h-full w-full object-cover" />
@@ -109,7 +109,7 @@ export default function MyEvents({ myEvents }: { myEvents: MyEvent[] }) {
                                     )}
 
                                     {/* Actions */}
-                                    <div className="mt-3 flex gap-2 mb-2">
+                                    <div className="mt-3 mb-2 flex gap-2">
                                         {event.status === 'approved' && (
                                             <Link href={showEvent(event.id).url} className="flex-1">
                                                 <button className="w-full rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-muted">

@@ -15,7 +15,7 @@ class HostMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || !$request->user()->isHost()) {
+        if (! $request->user() || ! $request->user()->isHost()) {
             abort(403, 'Unauthorized access. Host privileges required.');
         }
 

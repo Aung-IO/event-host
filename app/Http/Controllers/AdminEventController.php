@@ -23,7 +23,7 @@ class AdminEventController extends Controller
 
         return Inertia::render('feats/admin/event-approvals', [
             'pendingEvents' => $pendingEvents,
-            'pendingCount'  => $pendingCount,
+            'pendingCount' => $pendingCount,
         ]);
     }
 
@@ -33,7 +33,7 @@ class AdminEventController extends Controller
     public function approve(Event $event)
     {
         $event->update([
-            'status'      => 'approved',
+            'status' => 'approved',
             'approved_by' => auth()->id(),
             'approved_at' => now(),
             'rejected_at' => null,
@@ -53,11 +53,11 @@ class AdminEventController extends Controller
         ]);
 
         $event->update([
-            'status'        => 'rejected',
-            'rejected_at'   => now(),
+            'status' => 'rejected',
+            'rejected_at' => now(),
             'reject_reason' => $validated['reject_reason'],
-            'approved_by'   => null,
-            'approved_at'   => null,
+            'approved_by' => null,
+            'approved_at' => null,
         ]);
 
         return back()->with('success', "Event \"{$event->title}\" has been rejected.");
