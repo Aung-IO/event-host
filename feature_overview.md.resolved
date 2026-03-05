@@ -1,0 +1,128 @@
+# Event-Host Project — Feature Overview & Roadmap
+
+## ✅ What's Already Built
+
+### Core Infrastructure
+- Laravel + Inertia.js + React stack
+- Role-based auth: `admin`, `host`, [user](file:///Users/apwiz/msc/web/project/event-host/app/Models/EventRegistration.php#24-28) (with middleware guards)
+- Avatar upload for users
+- SQLite database with migrations
+
+### Public
+- Landing / welcome page
+- Browse approved events listing (`/events`)
+- Event detail page with host info, capacity, tags, price, join/leave
+
+### Auth
+- Register, Login, Logout
+- Profile update (name, email, avatar, password)
+
+### Host
+- Host dashboard
+- Create / Edit / Delete events (with image upload, tags, price, capacity)
+- My Events list with status display (pending / approved / rejected + reject reason)
+- View & Edit actions in toolbar for approved events
+
+### Admin
+- Admin dashboard
+- Users list with role management and password reset
+- Event Approvals — approve / reject with reject reason
+
+### User
+- User dashboard
+- My Registrations list (events joined)
+- Join / Leave events
+
+---
+
+## 🚧 Features Left to Add
+
+### 🔴 High Priority (Core Functionality Gaps)
+
+| # | Feature | Roles | Details |
+|---|---------|-------|---------|
+| 1 | **Event Search & Filtering** | Public | Filter by tags, date range, location, price range, keyword search on `/events` |
+| 2 | **Event Capacity Status** | Public/User | Show "Sold Out" badge when `available_spots == 0`; disable join button |
+| 3 | **Registration Status on Event Card** | User | Show "Registered" badge on cards in `/events` listing for already-joined events |
+| 4 | **Host Event Attendees List** | Host | Page for host to see who registered for each of their events |
+| 5 | **Admin Dashboard Stats** | Admin | Real stats: total events, pending approvals count, total users, total registrations |
+
+### 🟡 Medium Priority (Quality of Life)
+
+| # | Feature | Roles | Details |
+|---|---------|-------|---------|
+| 6 | **Event Pagination** | Public | Paginate `/events` listing — performance issue as events grow |
+| 7 | **Delete Event Confirmation** | Host | Confirmation modal before deleting an event |
+| 8 | **Edit Event resets to Pending** | Host/Admin | When a host edits an approved event, reset status to `pending` for re-approval |
+| 9 | **Reject Reason Display in Admin** | Admin | Show the reject reason on the approvals list / detail view |
+| 10 | **User Profile Page (public)** | Public | Public profile for hosts showing their events |
+| 11 | **Flash Message Toasts** | All | Global toast/snackbar system for success/error feedback (currently only some pages have it) |
+
+### 🟢 Lower Priority (Enhancements)
+
+| # | Feature | Roles | Details |
+|---|---------|-------|---------|
+| 12 | **Email Notifications** | All | Notify host when event is approved/rejected; notify user when event is cancelled |
+| 13 | **Event Cancellation by Host** | Host | Allow hosts to cancel an event (notify registered users) |
+| 14 | **Image Storage Cleanup** | Host | Delete old event image from disk when replaced or event is deleted |
+| 15 | **Event Comments / Q&A** | User | Allow users to post questions/comments on an event page |
+| 16 | **Ticket / QR Code** | User | Generate a simple registration ticket (PDF or QR) for users after joining |
+| 17 | **Admin Analytics Page** | Admin | Charts for registrations over time, popular tags, top hosts |
+| 18 | **Dark Mode** | All | Toggle for UI theme preference |
+
+---
+
+## 🗺️ Suggested Build Order
+
+```
+Phase 1 — Fill Core Gaps
+  → #1 Event Search & Filtering
+  → #2 Sold Out / Capacity Badge
+  → #3 "Registered" badge on listing
+  → #5 Admin Dashboard real stats
+
+Phase 2 — Host Tools
+  → #4 Attendees List for Host
+  → #7 Delete Confirmation Modal
+  → #8 Edit → resets to Pending
+  → #14 Image Cleanup on Delete
+
+Phase 3 — Polish
+  → #6 Pagination
+  → #11 Global Flash Toast System
+  → #9 Reject Reason in Admin view
+  → #10 Public Host Profile
+
+Phase 4 — Extended Features
+  → #12 Email Notifications
+  → #13 Event Cancellation
+  → #15 Comments / Q&A
+  → #16 Ticket / QR Code
+  → #17 Analytics
+```
+
+---
+
+## 📁 Project Structure Summary
+
+```
+app/
+  Models/        Event, User, EventRegistration
+  Http/
+    Controllers/ EventController, EventRegistrationController,
+                 AdminDashboardController, AdminEventController,
+                 HostDashboardController, ProfileController, Auth/*
+    Middleware/  AdminMiddleware, HostMiddleware, Authenticate, ...
+
+resources/js/
+  pages/
+    feats/
+      events/    index, show, create, edit, my-events
+      admin/     admin-dashboard, users, event-approvals, admin-profile
+      host/      host-dashboard, host-profile
+      user/      dashboard, my-registrations, user-profile
+    auth/        login, register
+    welcome.tsx
+
+routes/web.php   (public, guest, auth, admin, host, user groups)
+```

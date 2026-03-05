@@ -11,12 +11,23 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $allEvents = Event::where('status', 'approved')->get();
+        $query = Event::where('status', 'approved');
+
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        if ($tag = $request->input('tag')) {
+            $query->whereJsonContains('tags', $tag);
+        }
+
+        $allEvents = $query->latest()->get();
 
         return Inertia::render('feats/events/index', [
             'allEvents' => $allEvents,
+            'filters'   => $request->only('search', 'tag'),
         ]);
     }
 
@@ -24,7 +35,7 @@ class EventController extends Controller
     {
         $myEvents = Event::where('host_id', auth()->id())
             ->latest()
-            ->get(['id', 'host_id', 'title', 'description', 'start_date', 'end_date', 'location', 'image', 'capacity', 'price', 'tags', 'status', 'reject_reason', 'created_at']);
+            ->get();
 
         return Inertia::render('feats/events/my-events', [
             'myEvents' => $myEvents,
