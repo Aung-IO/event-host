@@ -7,6 +7,7 @@ import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { type CardEvent, type EventFilters } from '@/types';
 
 const ALL_TAGS = [
     'Music',
@@ -23,14 +24,9 @@ const ALL_TAGS = [
     'Charity',
 ] as const;
 
-interface Filters {
-    search?: string;
-    tag?: string;
-}
-
 interface Props {
-    allEvents: any[];
-    filters: Filters;
+    allEvents: CardEvent[];
+    filters: EventFilters;
 }
 
 export default function EventList({ allEvents, filters = {} }: Props) {
@@ -152,7 +148,7 @@ export default function EventList({ allEvents, filters = {} }: Props) {
                 {/* Event grid or empty state */}
                 {allEvents.length > 0 ? (
                     <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-                        {allEvents.map((event: any) => (
+                        {allEvents.map((event: CardEvent) => (
                             <EventCard key={event.id} event={event} />
                         ))}
                     </div>

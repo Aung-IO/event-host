@@ -6,19 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { cn } from '@/lib/utils';
 import { show as showEvent } from '@/routes/events';
 import hostEvents from '@/routes/host/events';
+import { type CardEvent } from '@/types';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-
-interface CardEvent {
-    id: number;
-    title: string;
-    location: string;
-    start_date: string;
-    end_date: string;
-    tags?: string[];
-    available_spots: number;
-    host_id?: number;
-}
 
 interface CardPageProps {
     auth?: { user?: { id: number; role: string } | null };

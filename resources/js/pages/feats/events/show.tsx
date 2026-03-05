@@ -10,27 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import events from '@/routes/events';
-
-interface Host {
-    id: number;
-    name: string;
-    avatar?: string | null;
-}
-
-interface Event {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    location: string;
-    start_date: string;
-    end_date: string;
-    capacity: number;
-    price: number;
-    available_spots: number;
-    tags?: string[];
-    user?: Host | null;
-}
+import { type Event } from '@/types';
 
 interface AuthUser {
     id: number;
@@ -207,7 +187,7 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                                 {joinForm.processing ? 'Joining…' : isSoldOut ? 'Sold Out' : 'Join Event'}
                             </Button>
                         ) : null}
-                        <p className="text-lg text-muted-foreground text-center">{!canJoinLeave ? 'Please log in to join this event' : ''}</p>
+                        <p className="text-center text-lg text-muted-foreground">{!canJoinLeave ? 'Please log in to join this event' : ''}</p>
                     </CardContent>
                 </Card>
 

@@ -11,33 +11,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import adminEvents from '@/routes/admin/events';
+import { type Event } from '@/types';
 import AdminLayout from './admin-layout';
 
-interface Host {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string | null;
-}
-
-interface PendingEvent {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    location: string;
-    start_date: string;
-    end_date: string;
-    capacity: number;
-    price: number;
-    tags?: string[];
-    status: 'pending' | 'approved' | 'rejected';
-    created_at: string;
-    user?: Host | null;
-}
-
 interface Props {
-    pendingEvents: PendingEvent[];
+    pendingEvents: Event[];
     pendingCount: number;
     flash?: { success?: string; error?: string };
     [key: string]: unknown;
@@ -46,7 +24,7 @@ interface Props {
 export default function EventApprovals() {
     const { pendingEvents, pendingCount, flash } = usePage<Props>().props;
 
-    const [rejectTarget, setRejectTarget] = useState<PendingEvent | null>(null);
+    const [rejectTarget, setRejectTarget] = useState<Event | null>(null);
 
     const approveForm = useForm({});
     const rejectForm = useForm({ reject_reason: '' });
@@ -56,13 +34,13 @@ export default function EventApprovals() {
         if (flash?.error) toast.error(flash.error as string);
     }, [flash]);
 
-    function handleApprove(event: PendingEvent) {
+    function handleApprove(event: Event) {
         approveForm.post(adminEvents.approve.url(event.id), {
             preserveScroll: true,
         });
     }
 
-    function openRejectSheet(event: PendingEvent) {
+    function openRejectSheet(event: Event) {
         setRejectTarget(event);
         rejectForm.reset();
     }
@@ -125,7 +103,9 @@ export default function EventApprovals() {
                                     <div>
                                         <div className="mb-1 flex flex-wrap items-start justify-between gap-2">
                                             <h2 className="text-xl font-bold text-slate-800">{event.title}</h2>
-                                            <span className="text-xs text-slate-400">Submitted {formatDate(event.created_at, 'MMM dd, yyyy')}</span>
+                                            <span className="text-xs text-slate-400">
+                                                Submitted {event.created_at ? formatDate(event.created_at, 'MMM dd, yyyy') : '—'}
+                                            </span>
                                         </div>
 
                                         {/* Host info */}

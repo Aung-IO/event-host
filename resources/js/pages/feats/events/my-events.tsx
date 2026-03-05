@@ -6,29 +6,14 @@ import { toast } from 'sonner';
 
 import Header from '@/components/header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { show as showEvent } from '@/routes/events';
 import hostEvents from '@/routes/host/events';
+import { type Event } from '@/types';
 import HostLayout from '../host/host-layout';
-import { cn } from '@/lib/utils';
-
-interface MyEvent {
-    id: number;
-    host_id: number;
-    title: string;
-    description: string;
-    start_date: string;
-    end_date: string;
-    location: string;
-    image: string;
-    capacity: number;
-    price: number;
-    tags?: string[];
-    status: 'pending' | 'approved' | 'rejected';
-    reject_reason?: string | null;
-}
 
 interface Props {
-    myEvents: MyEvent[];
+    myEvents: Event[];
     flash?: { success?: string };
     [key: string]: unknown;
 }
@@ -48,7 +33,7 @@ const statusConfig = {
     },
 };
 
-export default function MyEvents({ myEvents }: { myEvents: MyEvent[] }) {
+export default function MyEvents({ myEvents }: { myEvents: Event[] }) {
     const { flash } = usePage<Props>().props;
 
     useEffect(() => {

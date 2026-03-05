@@ -1,25 +1,11 @@
 import { Link } from '@inertiajs/react';
 import { CalendarDays, MapPin } from 'lucide-react';
-
-import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import events from '@/routes/events';
+import { type Registration } from '@/types';
 import UserLayout from './user-layout';
-
-interface Registration {
-    id: number;
-    joined_at: string;
-    event: {
-        id: number;
-        title: string;
-        location: string;
-        start_date: string;
-        image: string;
-        status: string;
-    };
-}
 
 export default function MyRegistrations({ registrations }: { registrations: Registration[] }) {
     return (
@@ -41,7 +27,7 @@ export default function MyRegistrations({ registrations }: { registrations: Regi
                                     <img
                                         src={`/storage/${reg.event.image}`}
                                         alt={reg.event.title}
-                                        className="h-24 w-32 flex-shrink-0 rounded-xl object-cover"
+                                        className="h-24 w-32 shrink-0 rounded-xl object-cover"
                                     />
 
                                     <div className="flex-1 space-y-1.5">
