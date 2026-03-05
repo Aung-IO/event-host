@@ -24,8 +24,10 @@ const PREDEFINED_TAGS = [
     'Charity',
 ];
 
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2 MB
+
 export default function CreateEvent() {
-    const { data, setData, processing, errors, submit } = useForm({
+    const { data, setData, processing, errors, submit, setError, clearErrors } = useForm({
         title: '',
         description: '',
         start_date: '',
@@ -189,12 +191,19 @@ export default function CreateEvent() {
                                         type="file"
                                         accept="image/jpeg,image/png,image/jpg,image/gif"
                                         onChange={(e) => {
-                                            if (e.target.files) {
-                                                setData('image', e.target.files[0]);
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            if (file.size > MAX_IMAGE_BYTES) {
+                                                setError('image', 'The image file is too large. Please upload an image smaller than 2 MB.');
+                                                e.target.value = '';
+                                                return;
                                             }
+                                            clearErrors('image');
+                                            setData('image', file);
                                         }}
                                         className={errors.image ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
+                                    <p className="text-xs text-muted-foreground">Max file size: 2 MB. Accepted: JPEG, PNG, GIF.</p>
                                     {errors.image && <p className="text-sm text-red-500">{errors.image}</p>}
                                 </div>
 

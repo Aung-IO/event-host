@@ -1,6 +1,7 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Calendar, Clock, Pencil, Trash2 } from 'lucide-react';
+import { Ban, Calendar, Clock, Pencil, Trash2 } from 'lucide-react';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { show as showEvent } from '@/routes/events';
@@ -8,14 +9,28 @@ import hostEvents from '@/routes/host/events';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
+interface CardEvent {
+    id: number;
+    title: string;
+    location: string;
+    start_date: string;
+    end_date: string;
+    tags?: string[];
+    available_spots: number;
+    host_id?: number;
+}
+
+interface CardPageProps {
+    auth?: { user?: { id: number; role: string } | null };
+    [key: string]: unknown;
+}
+
 interface EventCardProps {
-    event: any;
+    event: CardEvent;
 }
 
 export default function EventCard({ event }: EventCardProps) {
-    console.log(event.tags);
-
-    const { auth } = usePage().props as any;
+    const { auth } = usePage<CardPageProps>().props;
     const isOwner = auth?.user?.id === event.host_id;
 
     function handleDelete(e: React.MouseEvent) {
@@ -26,9 +41,21 @@ export default function EventCard({ event }: EventCardProps) {
         }
     }
 
+    const isSoldOut = event.available_spots === 0;
+
     return (
         <Link href={showEvent(event.id).url}>
-            <Card key={event.id} className="transition hover:shadow-lg">
+            <Card key={event.id} className="relative transition hover:shadow-lg">
+                {/* Sold Out overlay badge */}
+                {isSoldOut && (
+                    <div className="absolute top-3 right-3 z-10">
+                        <Badge variant="destructive" className="flex items-center gap-1 px-2 py-1 text-xs font-semibold shadow">
+                            <Ban className="h-3 w-3" />
+                            Sold Out
+                        </Badge>
+                    </div>
+                )}
+
                 <CardHeader>
                     {event.tags && event.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
@@ -51,7 +78,22 @@ export default function EventCard({ event }: EventCardProps) {
                         {format(event.start_date, 'hh:mm a')} - {format(event.end_date, 'hh:mm a')}
                     </p>
                     <p className="text-sm text-muted-foreground">{event.location}</p>
-                    <Button className="mt-4 w-full">View Details</Button>
+
+                    {/* Spots indicator */}
+                    {!isSoldOut && typeof event.available_spots === 'number' && (
+                        <p className="text-xs text-muted-foreground">
+                            <span className="font-medium text-foreground">{event.available_spots}</span> spot{event.available_spots !== 1 ? 's' : ''}{' '}
+                            left
+                        </p>
+                    )}
+
+                    <Button
+                        className={cn('mt-4 w-full', isSoldOut && 'cursor-not-allowed opacity-60')}
+                        variant={isSoldOut ? 'outline' : 'default'}
+                        disabled={isSoldOut}
+                    >
+                        {isSoldOut ? 'Sold Out' : 'View Details'}
+                    </Button>
 
                     {isOwner && (
                         <div className="mt-4 flex justify-end gap-1">

@@ -32,21 +32,32 @@ interface Event {
     user?: Host | null;
 }
 
+interface AuthUser {
+    id: number;
+    name: string;
+    role: string;
+}
+
 interface Props {
     event: Event;
     userRegistered: boolean;
     flash?: { success?: string };
     errors?: { join?: string; leave?: string };
+    auth?: { user?: AuthUser | null };
     [key: string]: unknown;
 }
 
 export default function EventDetailPage({ event, userRegistered }: { event: Event; userRegistered: boolean }) {
-    const { flash, errors } = usePage<Props>().props;
+    const { flash, errors, auth } = usePage<Props>().props;
+
+    // Derive role: 'public' for unauthenticated visitors
+    const userRole: string = auth?.user?.role ?? 'public';
+    const canJoinLeave = userRole === 'user';
+    const isSoldOut = event.available_spots === 0;
 
     const taken = event.capacity - event.available_spots;
     const fillPct = event.capacity > 0 ? Math.min(100, (taken / event.capacity) * 100) : 0;
     const isAlmostFull = event.capacity > 0 && event.available_spots / event.capacity < 0.2;
-    const isFull = event.available_spots <= 0 && !userRegistered;
 
     const joinForm = useForm({});
     const leaveForm = useForm({});
@@ -120,8 +131,10 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                                 <Badge variant="secondary" className="bg-green-100 text-green-700">
                                     You're in ✓
                                 </Badge>
-                            ) : isFull ? (
-                                <Badge variant="destructive">Event Full</Badge>
+                            ) : isSoldOut ? (
+                                <Badge variant="destructive" className="font-semibold">
+                                    🚫 Sold Out
+                                </Badge>
                             ) : isAlmostFull ? (
                                 <Badge variant="destructive" className="animate-pulse">
                                     Filling up fast 🔥
@@ -173,8 +186,8 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                             </div>
                         )}
 
-                        {/* Join / Leave / Full button */}
-                        {userRegistered ? (
+                        {/* Join / Leave / Sold Out button — hidden for admin and host roles */}
+                        {canJoinLeave && userRegistered ? (
                             <Button
                                 size="lg"
                                 variant="outline"
@@ -184,11 +197,17 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                             >
                                 {leaveForm.processing ? 'Leaving…' : 'Leave Event'}
                             </Button>
-                        ) : (
-                            <Button size="lg" className="w-full rounded-xl" onClick={handleJoin} disabled={isFull || joinForm.processing}>
-                                {joinForm.processing ? 'Joining…' : isFull ? 'Event Full' : 'Join Event'}
+                        ) : canJoinLeave || userRole === 'public' ? (
+                            <Button
+                                size="lg"
+                                className="w-full rounded-xl"
+                                onClick={canJoinLeave && !isSoldOut ? handleJoin : undefined}
+                                disabled={isSoldOut || !canJoinLeave || joinForm.processing}
+                            >
+                                {joinForm.processing ? 'Joining…' : isSoldOut ? 'Sold Out' : 'Join Event'}
                             </Button>
-                        )}
+                        ) : null}
+                        <p className="text-lg text-muted-foreground text-center">{!canJoinLeave ? 'Please log in to join this event' : ''}</p>
                     </CardContent>
                 </Card>
 

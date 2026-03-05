@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\EventRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +18,25 @@ class AdminDashboardController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('feats/admin/admin-dashboard');
+        $totalEvents        = Event::count();
+        $pendingEvents      = Event::where('status', 'pending')->count();
+        $approvedEvents     = Event::where('status', 'approved')->count();
+        $rejectedEvents     = Event::where('status', 'rejected')->count();
+        $totalUsers         = User::count();
+        $totalRegistrations = EventRegistration::count();
+        $newUsersThisWeek   = User::where('created_at', '>=', now()->startOfWeek())->count();
+
+        return Inertia::render('feats/admin/admin-dashboard', [
+            'stats' => [
+                'totalEvents'        => $totalEvents,
+                'pendingEvents'      => $pendingEvents,
+                'approvedEvents'     => $approvedEvents,
+                'rejectedEvents'     => $rejectedEvents,
+                'totalUsers'         => $totalUsers,
+                'totalRegistrations' => $totalRegistrations,
+                'newUsersThisWeek'   => $newUsersThisWeek,
+            ],
+        ]);
     }
 
     /**
