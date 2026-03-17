@@ -49,9 +49,11 @@ export default function Header() {
 
                 {auth.user ? (
                     <>
-                        <Link href={logout()} method="post" as="button">
-                            <Button variant="destructive">Logout</Button>
-                        </Link>
+                        <Button variant="destructive" asChild>
+                            <Link href={logout()} method="post" as="button">
+                                Log out
+                            </Link>
+                        </Button>
                     </>
                 ) : (
                     <>

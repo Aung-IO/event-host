@@ -1,8 +1,10 @@
+import { Link } from '@inertiajs/react';
+import { Calendar, Clock } from 'lucide-react';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Clock } from 'lucide-react';
+import events from '@/routes/events';
 
 type Event = {
     id: number;
@@ -12,7 +14,7 @@ type Event = {
     category: string;
 };
 
-const events: Event[] = [
+const demoEvents: Event[] = [
     {
         id: 1,
         title: 'Tech Networking Night',
@@ -48,8 +50,10 @@ export default function LandingPage() {
                 <h2 className="text-5xl leading-tight font-bold tracking-tight">Discover. Join. Host.</h2>
                 <p className="mt-6 text-lg text-muted-foreground">Find amazing events around you or create your own and bring people together.</p>
                 <div className="mt-8 flex justify-center gap-4">
-                    <Button size="lg">Explore Events</Button>
-                    <Button size="lg" className="bg-secondary/20 text-secondary-foreground hover:bg-secondary/30">
+                    <Button size="lg">
+                        <Link href={events.index()}>Explore Events</Link>
+                    </Button>
+                    <Button size="lg" variant="outline">
                         Become a Host
                     </Button>
                 </div>
@@ -61,7 +65,7 @@ export default function LandingPage() {
                     <h3 className="mb-10 text-center text-3xl font-semibold">Featured Events</h3>
 
                     <div className="grid gap-6 md:grid-cols-3">
-                        {events.map((event) => (
+                        {demoEvents.map((event) => (
                             <Card key={event.id} className="transition hover:shadow-lg">
                                 <CardHeader>
                                     <Badge className="mb-2 w-fit">{event.category}</Badge>
@@ -105,7 +109,7 @@ export default function LandingPage() {
 
                         <div>
                             <h4 className="mb-3 text-xl font-semibold">3. Host Your Own</h4>
-                            <p className="text-muted-foreground">Create events and manage attendees easily.</p>
+                            <p className="text-muted-foreground">One stop hosting platform.</p>
                         </div>
                     </div>
                 </div>

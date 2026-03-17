@@ -1,6 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Ban, Calendar, Clock, Pencil, Trash2 } from 'lucide-react';
+import { Calendar, Clock, Pencil, Trash2 } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -35,30 +35,22 @@ export default function EventCard({ event }: EventCardProps) {
 
     return (
         <Link href={showEvent(event.id).url}>
-            <Card key={event.id} className="relative transition hover:shadow-lg">
-                {/* Sold Out overlay badge */}
-                {isSoldOut && (
-                    <div className="absolute top-3 right-3 z-10">
-                        <Badge variant="destructive" className="flex items-center gap-1 px-2 py-1 text-xs font-semibold shadow">
-                            <Ban className="h-3 w-3" />
-                            Sold Out
-                        </Badge>
-                    </div>
-                )}
-
+            <Card key={event.id} className="relative flex h-full flex-col transition hover:shadow-lg">
                 <CardHeader>
-                    {event.tags && event.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                            {event.tags.map((tag: string) => (
-                                <Badge key={tag}>{tag}</Badge>
+                    {/* Fixed-height tag row — always reserves space for 1–3 tags */}
+                    <div className="flex flex-wrap gap-1.5">
+                        {event.tags &&
+                            event.tags.map((tag: string) => (
+                                <Badge key={tag} className="shrink-0 text-xs">
+                                    {tag}
+                                </Badge>
                             ))}
-                        </div>
-                    )}
-                    <CardTitle>{event.title}</CardTitle>
-                    <CardDescription className={cn('pt-0 text-xs')}>Aung Pyae Kyaw | Frontend Developer</CardDescription>
+                    </div>
+                    <CardTitle className="line-clamp-2">{event.title}</CardTitle>
+                    <CardDescription className={cn('pt-0 text-xs')}>Hosted by | {event.user?.name}</CardDescription>
                 </CardHeader>
 
-                <CardContent className={cn('space-y-2')}>
+                <CardContent className={cn('flex flex-1 flex-col space-y-2')}>
                     <p className="flex items-center text-xs text-muted-foreground">
                         <Calendar className="mr-2 h-4 w-4" />
                         {format(event.start_date, 'MMM dd, yyyy')} - {format(event.end_date, 'MMM dd, yyyy')}
@@ -77,26 +69,30 @@ export default function EventCard({ event }: EventCardProps) {
                         </p>
                     )}
 
-                    <Button
-                        className={cn('mt-4 w-full', isSoldOut && 'cursor-not-allowed opacity-60')}
-                        variant={isSoldOut ? 'outline' : 'default'}
-                        disabled={isSoldOut}
-                    >
-                        {isSoldOut ? 'Sold Out' : 'View Details'}
-                    </Button>
+                    <div className="mt-auto">
+                        {isSoldOut && (
+                            <p className="text-xs text-muted-foreground">
+                                <span className="font-medium text-foreground">0 </span>spot left
+                            </p>
+                        )}
 
-                    {isOwner && (
-                        <div className="mt-4 flex justify-end gap-1">
-                            <Link href={hostEvents.edit(event.id).url} onClick={(e) => e.stopPropagation()}>
-                                <Button size="icon" variant="secondary" className="h-7 w-7">
-                                    <Pencil className="h-3.5 w-3.5" />
+                        <Button className={cn('mt-4 w-full', isSoldOut && 'cursor-not-allowed bg-red-500')} variant="default" disabled={isSoldOut}>
+                            {isSoldOut ? 'Sold Out' : 'View Details'}
+                        </Button>
+
+                        {isOwner && (
+                            <div className="mt-4 flex justify-end gap-1">
+                                <Link href={hostEvents.edit(event.id).url} onClick={(e) => e.stopPropagation()}>
+                                    <Button size="icon" variant="secondary" className="h-7 w-7">
+                                        <Pencil className="h-3.5 w-3.5" />
+                                    </Button>
+                                </Link>
+                                <Button size="icon" variant="destructive" className="h-7 w-7" onClick={handleDelete}>
+                                    <Trash2 className="h-3.5 w-3.5" />
                                 </Button>
-                            </Link>
-                            <Button size="icon" variant="destructive" className="h-7 w-7" onClick={handleDelete}>
-                                <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                        </div>
-                    )}
+                            </div>
+                        )}
+                    </div>
                 </CardContent>
             </Card>
         </Link>

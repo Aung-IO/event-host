@@ -77,6 +77,8 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                     </div>
                 </div>
 
+                {/* <div>{event.description}</div> */}
+
                 {/* Title + Rating */}
                 <div className="mt-8 space-y-3">
                     <h1 className="text-4xl font-bold tracking-tight">{event.title}</h1>
@@ -190,6 +192,10 @@ export default function EventDetailPage({ event, userRegistered }: { event: Even
                         <p className="text-center text-lg text-muted-foreground">{!canJoinLeave ? 'Please log in to join this event' : ''}</p>
                     </CardContent>
                 </Card>
+
+                <div className="mt-16 space-y-4">
+                    <p className="text-muted-foreground">{event.description}</p>
+                </div>
 
                 {/* Host */}
                 <div className="mt-12 flex items-start gap-6">

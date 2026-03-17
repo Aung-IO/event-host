@@ -23,7 +23,7 @@ class EventController extends Controller
             $query->whereJsonContains('tags', $tag);
         }
 
-        $allEvents = $query->withCount('registrations')->latest()->get();
+        $allEvents = $query->with('user:id,name')->withCount('registrations')->latest()->get();
 
         return Inertia::render('feats/events/index', [
             'allEvents' => $allEvents,

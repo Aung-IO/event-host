@@ -133,7 +133,7 @@ export default function EventList({ allEvents, filters = {} }: Props) {
 
                     {/* Result count */}
                     <p className="text-sm text-muted-foreground">
-                        {allEvents.length === 0 ? 'No events found' : `${allEvents.length} event${allEvents.length === 1 ? '' : 's'} found`}
+                        {/* {allEvents.length === 0 ? 'No events found' : `${allEvents.length} event${allEvents.length === 1 ? '' : 's'} found`} */}
                         {hasFilters && (
                             <span className="ml-1">
                                 for

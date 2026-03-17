@@ -37,6 +37,7 @@ export interface CardEvent {
     tags?: string[];
     available_spots: number;
     host_id?: number;
+    user: EventHost;
 }
 
 /** Registration entry for the My Registrations page */
