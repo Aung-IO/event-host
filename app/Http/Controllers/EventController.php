@@ -151,12 +151,31 @@ class EventController extends Controller
     }
 
     /**
+     * Resubmit a rejected event back to pending approval.
+     */
+    public function resubmit(Event $event)
+    {
+        abort_if($event->host_id !== auth()->id(), 403);
+        abort_if($event->status !== 'rejected', 422, 'Only rejected events can be resubmitted.');
+
+        $event->update([
+            'status'        => 'pending',
+            'reject_reason' => null,
+            'rejected_at'   => null,
+        ]);
+
+        return redirect()->route('host.my-events')->with('success', 'Event resubmitted for approval!');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event)
     {
+        abort_if($event->host_id !== auth()->id(), 403);
+
         $event->delete();
 
-        return redirect()->route('events.index');
+        return redirect()->route('host.my-events')->with('success', 'Event deleted successfully.');
     }
 }

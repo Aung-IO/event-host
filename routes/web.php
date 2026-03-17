@@ -80,6 +80,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [HostDashboardController::class, 'index'])
             ->name('dashboard');                              // → host.dashboard
         Route::resource('events', EventController::class);   // → host.events.*
+        Route::post('/events/{event}/resubmit', [EventController::class, 'resubmit'])
+            ->name('events.resubmit');                        // → host.events.resubmit
         Route::get('/my-events', [EventController::class, 'myEvents'])
             ->name('my-events');                              // → host.my-events
         Route::get('/profile', [ProfileController::class, 'showHost'])
