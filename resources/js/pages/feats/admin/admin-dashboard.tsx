@@ -1,10 +1,10 @@
+import { Link, usePage } from '@inertiajs/react';
+import { CalendarCheck, CalendarClock, CalendarX2, LayoutGrid, Ticket, UserPlus, Users } from 'lucide-react';
 import Header from '@/components/header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import admin from '@/routes/admin';
-import { Link, usePage } from '@inertiajs/react';
-import { CalendarCheck, CalendarClock, CalendarX2, LayoutGrid, Ticket, UserPlus, Users } from 'lucide-react';
 import AdminLayout from './admin-layout';
 
 type Stats = {

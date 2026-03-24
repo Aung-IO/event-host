@@ -1,3 +1,5 @@
+import { Link, usePage } from '@inertiajs/react';
+import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
 import {
     Sidebar,
     SidebarContent,
@@ -17,8 +19,6 @@ import {
 } from '@/components/ui/sidebar';
 import host from '@/routes/host';
 
-import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, Bell, CalendarDays, LayoutDashboard, PlusCircle, Settings, Users } from 'lucide-react';
 
 type PageProps = {
     auth: {

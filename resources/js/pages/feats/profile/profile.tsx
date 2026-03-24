@@ -1,3 +1,5 @@
+import { useForm, usePage } from '@inertiajs/react';
+import { useRef, useState } from 'react';
 import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,8 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import profile from '@/routes/profile';
-import { useForm, usePage } from '@inertiajs/react';
-import { useRef, useState } from 'react';
 import AdminLayout from '../admin/admin-layout';
 
 type User = {

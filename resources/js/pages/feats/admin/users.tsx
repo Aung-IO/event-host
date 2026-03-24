@@ -1,13 +1,13 @@
-import Header from '@/components/header';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import admin from '@/routes/admin';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import AdminLayout from './admin-layout';
-import RoleBadge from '@/components/role-badge';
 import AvatarCircle from '@/components/avatar-circle';
+import Header from '@/components/header';
+import RoleBadge from '@/components/role-badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import admin from '@/routes/admin';
+import AdminLayout from './admin-layout';
 
 type User = {
     id: number;
