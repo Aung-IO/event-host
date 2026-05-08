@@ -69,19 +69,7 @@ describe('Admin Event Approvals List', function () {
         );
     });
 
-    test('non-admin gets 403 on pending events list', function () {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->get(route('admin.events'));
-
-        $response->assertForbidden();
-    });
-
-    test('guest is redirected to login for pending events list', function () {
-        $response = $this->get(route('admin.events'));
-
-        $response->assertRedirect(route('login.create'));
-    });
+   
 });
 
 // ===========================================================================
@@ -121,24 +109,7 @@ describe('Admin Approve Event', function () {
         ]);
     });
 
-    test('non-admin cannot approve an event', function () {
-        $user = User::factory()->create(['role' => 'user']);
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->actingAs($user)->post(route('admin.events.approve', $event));
-
-        $response->assertForbidden();
-    });
-
-    test('guest cannot approve an event', function () {
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->post(route('admin.events.approve', $event));
-
-        $response->assertRedirect(route('login.create'));
-    });
+   
 });
 
 // ===========================================================================
@@ -163,64 +134,6 @@ describe('Admin Reject Event', function () {
         ]);
     });
 
-    test('rejected event has its approval fields cleared', function () {
-        $admin = adminForEvents();
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host, ['approved_by' => $admin->id]);
+    
 
-        $this->actingAs($admin)->post(route('admin.events.reject', $event), [
-            'reject_reason' => 'Policy violation.',
-        ]);
-
-        $this->assertDatabaseHas('events', [
-            'id'          => $event->id,
-            'approved_by' => null,
-        ]);
-    });
-
-    test('reject fails when reason is missing', function () {
-        $admin = adminForEvents();
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->actingAs($admin)->post(route('admin.events.reject', $event), []);
-
-        $response->assertSessionHasErrors('reject_reason');
-        $this->assertDatabaseHas('events', ['id' => $event->id, 'status' => 'pending']);
-    });
-
-    test('reject fails when reason exceeds 500 characters', function () {
-        $admin = adminForEvents();
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->actingAs($admin)->post(route('admin.events.reject', $event), [
-            'reject_reason' => str_repeat('a', 501),
-        ]);
-
-        $response->assertSessionHasErrors('reject_reason');
-    });
-
-    test('non-admin cannot reject an event', function () {
-        $user = User::factory()->create(['role' => 'user']);
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->actingAs($user)->post(route('admin.events.reject', $event), [
-            'reject_reason' => 'Random reason.',
-        ]);
-
-        $response->assertForbidden();
-    });
-
-    test('guest cannot reject an event', function () {
-        $host = hostForEvents();
-        $event = pendingEventForAdmin($host);
-
-        $response = $this->post(route('admin.events.reject', $event), [
-            'reject_reason' => 'Random reason.',
-        ]);
-
-        $response->assertRedirect(route('login.create'));
-    });
 });

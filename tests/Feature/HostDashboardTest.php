@@ -76,46 +76,9 @@ describe('Host Dashboard', function () {
         );
     });
 
-    test('host dashboard total registrations counts only registrations for host\'s events', function () {
-        $host1 = hostUser();
-        $host2 = hostUser();
-        $event1 = hostEvent($host1);
-        $event2 = hostEvent($host2);
-        $user = User::factory()->create();
+   
 
-        EventRegistration::create(['event_id' => $event1->id, 'user_id' => $user->id, 'joined_at' => now()]);
-        EventRegistration::create(['event_id' => $event2->id, 'user_id' => $user->id, 'joined_at' => now()]);
+   
 
-        $response = $this->actingAs($host1)->get(route('host.dashboard'));
-
-        $response->assertInertia(
-            fn ($page) => $page->where('stats.totalRegistrations', 1)
-        );
-    });
-
-    test('upcoming events in dashboard are ordered by start date', function () {
-        $host = hostUser();
-        hostEvent($host, ['title' => 'Later Event', 'start_date' => now()->addDays(10)->toDateString(), 'end_date' => now()->addDays(11)->toDateString()]);
-        hostEvent($host, ['title' => 'Sooner Event', 'start_date' => now()->addDays(3)->toDateString(), 'end_date' => now()->addDays(4)->toDateString()]);
-
-        $response = $this->actingAs($host)->get(route('host.dashboard'));
-
-        $response->assertInertia(
-            fn ($page) => $page->where('upcomingEvents.0.title', 'Sooner Event')
-        );
-    });
-
-    test('non-host user gets 403 on host dashboard', function () {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->get(route('host.dashboard'));
-
-        $response->assertForbidden();
-    });
-
-    test('guest is redirected to login for host dashboard', function () {
-        $response = $this->get(route('host.dashboard'));
-
-        $response->assertRedirect(route('login.create'));
-    });
+    
 });

@@ -70,7 +70,7 @@ export default function CreateEvent() {
                                         id="title"
                                         value={data.title}
                                         onChange={(e) => setData('title', e.target.value)}
-                                        placeholder="Smoke Weed Everyday"
+                                        placeholder="Event Title"
                                         className={errors.title ? 'border-red-500 focus-visible:ring-red-500' : ''}
                                     />
                                     {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}

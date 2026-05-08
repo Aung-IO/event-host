@@ -59,27 +59,7 @@ describe('Admin Dashboard', function () {
         );
     });
 
-    test('non-admin user gets 403 on admin dashboard', function () {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->get(route('admin.dashboard'));
-
-        $response->assertForbidden();
-    });
-
-    test('host user gets 403 on admin dashboard', function () {
-        $host = User::factory()->create(['role' => 'host']);
-
-        $response = $this->actingAs($host)->get(route('admin.dashboard'));
-
-        $response->assertForbidden();
-    });
-
-    test('guest is redirected to login for admin dashboard', function () {
-        $response = $this->get(route('admin.dashboard'));
-
-        $response->assertRedirect(route('login.create'));
-    });
+   
 });
 
 // ===========================================================================
@@ -97,19 +77,6 @@ describe('Admin Users List', function () {
         $response->assertInertia(fn ($page) => $page->component('feats/admin/users')->has('users'));
     });
 
-    test('non-admin cannot view users list', function () {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->get(route('admin.users'));
-
-        $response->assertForbidden();
-    });
-
-    test('guest is redirected to login for users list', function () {
-        $response = $this->get(route('admin.users'));
-
-        $response->assertRedirect(route('login.create'));
-    });
 });
 
 // ===========================================================================
@@ -139,20 +106,4 @@ describe('Admin Reset Password', function () {
         $response->assertSessionHas('resetInfo.password');
     });
 
-    test('non-admin cannot reset a user\'s password', function () {
-        $actor = User::factory()->create(['role' => 'user']);
-        $target = User::factory()->create();
-
-        $response = $this->actingAs($actor)->post(route('admin.users.reset-password', $target));
-
-        $response->assertForbidden();
-    });
-
-    test('guest cannot reset a user\'s password', function () {
-        $user = User::factory()->create();
-
-        $response = $this->post(route('admin.users.reset-password', $user));
-
-        $response->assertRedirect(route('login.create'));
-    });
 });

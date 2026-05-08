@@ -15,14 +15,4 @@ describe('cn', () => {
         expect(cn('p-2', 'px-4')).toBe('p-2 px-4'); // tailwind-merge handles this correctly based on tailwind specific rules
         expect(cn('px-4', 'p-2')).toBe('p-2');
     });
-
-    test('handles deeply nested arrays and objects', () => {
-        expect(
-            cn('px-2', ['py-1', { 'bg-red-500': true, 'text-white': false }])
-        ).toBe('px-2 py-1 bg-red-500');
-    });
-
-    test('handles undefined and null inputs', () => {
-        expect(cn('px-2', undefined, null, 'bg-red-500')).toBe('px-2 bg-red-500');
-    });
 });

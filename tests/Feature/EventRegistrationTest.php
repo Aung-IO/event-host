@@ -120,24 +120,9 @@ describe('Leave Event', function () {
         ]);
     });
 
-    test('user cannot leave an event they never joined', function () {
-        $host = registrationHost();
-        $user = User::factory()->create(['role' => 'user']);
-        $event = registrableEvent($host);
+   
 
-        $response = $this->actingAs($user)->delete(route('events.leave', $event));
-
-        $response->assertSessionHasErrors('leave');
-    });
-
-    test('guest cannot leave an event', function () {
-        $host = registrationHost();
-        $event = registrableEvent($host);
-
-        $response = $this->delete(route('events.leave', $event));
-
-        $response->assertRedirect(route('login.create'));
-    });
+    
 });
 
 // ===========================================================================

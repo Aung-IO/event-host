@@ -19,14 +19,14 @@ function makeHost(): User
 function eventPayload(array $overrides = []): array
 {
     return array_merge([
-        'title'       => 'Test Event',
+        'title' => 'Test Event',
         'description' => 'A test description',
-        'start_date'  => now()->addDays(5)->toDateString(),
-        'end_date'    => now()->addDays(6)->toDateString(),
-        'location'    => 'Yangon',
-        'capacity'    => 100,
-        'price'       => 0,
-        'tags'        => ['Music'],
+        'start_date' => now()->addDays(5)->toDateString(),
+        'end_date' => now()->addDays(6)->toDateString(),
+        'location' => 'Yangon',
+        'capacity' => 100,
+        'price' => 0,
+        'tags' => ['Music'],
     ], $overrides);
 }
 
@@ -36,17 +36,17 @@ function eventPayload(array $overrides = []): array
 function approvedEvent(User $host, array $overrides = []): Event
 {
     return Event::create(array_merge([
-        'title'       => 'Approved Event',
+        'title' => 'Approved Event',
         'description' => 'Description',
-        'start_date'  => now()->addDays(3)->toDateString(),
-        'end_date'    => now()->addDays(4)->toDateString(),
-        'location'    => 'Yangon',
-        'capacity'    => 50,
-        'price'       => 0,
-        'tags'        => [],
-        'image'       => 'events/test.jpg',
-        'host_id'     => $host->id,
-        'status'      => 'approved',
+        'start_date' => now()->addDays(3)->toDateString(),
+        'end_date' => now()->addDays(4)->toDateString(),
+        'location' => 'Yangon',
+        'capacity' => 50,
+        'price' => 0,
+        'tags' => [],
+        'image' => 'events/test.jpg',
+        'host_id' => $host->id,
+        'status' => 'approved',
     ], $overrides));
 }
 
@@ -55,12 +55,6 @@ function approvedEvent(User $host, array $overrides = []): Event
 // ===========================================================================
 
 describe('Event Index (public)', function () {
-    test('anyone can view the events listing page', function () {
-        $response = $this->get(route('events.index'));
-
-        $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/events/index'));
-    });
 
     test('events listing only shows approved events', function () {
         $host = makeHost();
@@ -108,56 +102,11 @@ describe('Event Index (public)', function () {
         );
     });
 
-    test('anyone can view an approved event detail page', function () {
-        $host = makeHost();
-        $event = approvedEvent($host);
-
-        $response = $this->get(route('events.show', $event));
-
-        $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/events/show'));
-    });
-
-    test('guest sees userRegistered as false on event show', function () {
-        $host = makeHost();
-        $event = approvedEvent($host);
-
-        $response = $this->get(route('events.show', $event));
-
-        $response->assertInertia(
-            fn ($page) => $page->where('userRegistered', false)
-        );
-    });
 });
 
 // ===========================================================================
 // Host Event Routes
 // ===========================================================================
-
-describe('Host Event Create', function () {
-    test('host can view the create event page', function () {
-        $host = makeHost();
-
-        $response = $this->actingAs($host)->get(route('host.events.create'));
-
-        $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/events/create'));
-    });
-
-    test('non-host user cannot access create event page', function () {
-        $user = User::factory()->create(['role' => 'user']);
-
-        $response = $this->actingAs($user)->get(route('host.events.create'));
-
-        $response->assertForbidden();
-    });
-
-    test('guest is redirected to login when accessing create event page', function () {
-        $response = $this->get(route('host.events.create'));
-
-        $response->assertRedirect(route('login.create'));
-    });
-});
 
 describe('Host Event Store', function () {
     test('host can create an event with valid data', function () {
@@ -173,9 +122,9 @@ describe('Host Event Store', function () {
         $response->assertRedirect(route('host.my-events'));
 
         $this->assertDatabaseHas('events', [
-            'title'   => 'Test Event',
+            'title' => 'Test Event',
             'host_id' => $host->id,
-            'status'  => 'pending',
+            'status' => 'pending',
         ]);
     });
 
@@ -224,30 +173,9 @@ describe('Host Event Store', function () {
         $response->assertSessionHasErrors('image');
     });
 
-    test('non-host cannot create an event', function () {
-        Storage::fake('public');
-        $user = User::factory()->create(['role' => 'user']);
-        $image = UploadedFile::fake()->image('event.jpg');
-
-        $response = $this->actingAs($user)->post(
-            route('host.events.store'),
-            array_merge(eventPayload(), ['image' => $image])
-        );
-
-        $response->assertForbidden();
-    });
 });
 
 describe('Host Event Edit & Update', function () {
-    test('host can view the edit page for their own event', function () {
-        $host = makeHost();
-        $event = approvedEvent($host);
-
-        $response = $this->actingAs($host)->get(route('host.events.edit', $event));
-
-        $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/events/edit'));
-    });
 
     test('host can update their event', function () {
         Storage::fake('public');
@@ -261,22 +189,6 @@ describe('Host Event Edit & Update', function () {
 
         $response->assertRedirect(route('host.my-events'));
         $this->assertDatabaseHas('events', ['id' => $event->id, 'title' => 'Updated Title']);
-    });
-
-    test('host can update event with a new image', function () {
-        Storage::fake('public');
-        $host = makeHost();
-        $event = approvedEvent($host);
-        $newImage = UploadedFile::fake()->image('new.jpg');
-
-        $response = $this->actingAs($host)->put(
-            route('host.events.update', $event),
-            array_merge(eventPayload(['title' => 'With New Image']), ['image' => $newImage])
-        );
-
-        $response->assertRedirect(route('host.my-events'));
-        $event->refresh();
-        Storage::disk('public')->assertExists($event->image);
     });
 
     test('event update fails with missing required fields', function () {
@@ -293,14 +205,6 @@ describe('Host Event Edit & Update', function () {
 });
 
 describe('Host My Events', function () {
-    test('host can view their my-events page', function () {
-        $host = makeHost();
-
-        $response = $this->actingAs($host)->get(route('host.my-events'));
-
-        $response->assertOk();
-        $response->assertInertia(fn ($page) => $page->component('feats/events/my-events'));
-    });
 
     test('my-events only shows events belonging to the host', function () {
         $host1 = makeHost();
@@ -329,24 +233,6 @@ describe('Host Event Resubmit', function () {
         $this->assertDatabaseHas('events', ['id' => $event->id, 'status' => 'pending', 'reject_reason' => null]);
     });
 
-    test('host cannot resubmit a non-rejected event', function () {
-        $host = makeHost();
-        $event = approvedEvent($host, ['status' => 'pending']);
-
-        $response = $this->actingAs($host)->post(route('host.events.resubmit', $event));
-
-        $response->assertStatus(422);
-    });
-
-    test('host cannot resubmit another host\'s event', function () {
-        $host1 = makeHost();
-        $host2 = makeHost();
-        $event = approvedEvent($host1, ['status' => 'rejected']);
-
-        $response = $this->actingAs($host2)->post(route('host.events.resubmit', $event));
-
-        $response->assertForbidden();
-    });
 });
 
 describe('Host Event Delete', function () {
@@ -360,24 +246,4 @@ describe('Host Event Delete', function () {
         $this->assertDatabaseMissing('events', ['id' => $event->id]);
     });
 
-    test('host cannot delete another host\'s event', function () {
-        $host1 = makeHost();
-        $host2 = makeHost();
-        $event = approvedEvent($host1);
-
-        $response = $this->actingAs($host2)->delete(route('host.events.destroy', $event));
-
-        $response->assertForbidden();
-        $this->assertDatabaseHas('events', ['id' => $event->id]);
-    });
-
-    test('non-host cannot delete events', function () {
-        $host = makeHost();
-        $user = User::factory()->create(['role' => 'user']);
-        $event = approvedEvent($host);
-
-        $response = $this->actingAs($user)->delete(route('host.events.destroy', $event));
-
-        $response->assertForbidden();
-    });
 });

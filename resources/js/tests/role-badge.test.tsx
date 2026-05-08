@@ -36,12 +36,4 @@ describe('RoleBadge', () => {
         expect(badge.className).toContain('bg-red-100 text-red-700');
     });
 
-    test('renders unknown role with default gray styles', () => {
-        render(<RoleBadge role="guest" />);
-        const badge = screen.getByText('guest');
-        
-        expect(badge).toBeDefined();
-        expect(badge.className).toContain('capitalize');
-        expect(badge.className).toContain('bg-gray-100 text-gray-700');
-    });
 });

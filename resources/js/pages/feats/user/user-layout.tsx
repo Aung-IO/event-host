@@ -39,11 +39,9 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { label: 'Dashboard', href: user.dashboard.url(), icon: LayoutDashboard },
+    // { label: 'Dashboard', href: user.dashboard.url(), icon: LayoutDashboard },
     { label: 'Joined Events', href: events.myRegistrations.url(), icon: CalendarCheck },
-    { label: 'Bookmarks', href: '#', icon: Bookmark },
-    { label: 'Notifications', href: '#', icon: Bell, badge: 2 },
-    // { label: 'My Profile',    href: user.profile.url(),   icon: User },
+   
 ];
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
